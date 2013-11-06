@@ -1,5 +1,5 @@
 #pragma once
-
+#include <assert.h>
 #include "Sprite.h"
 
 class CAnimatedSprite
@@ -28,7 +28,7 @@ public:
 			}
 	}
 
-	void LoadSprites(std::wstring filePathBase, unsigned int spritesNum)
+	void LoadSprites(std::wstring filePathBase, unsigned int spritesNum, int width, int height)
 	{
 		for (unsigned int index = 0; index < spritesNum; ++index)
 		{
@@ -37,7 +37,8 @@ public:
 			std::wstring wstr = wsstream.str();
 
 			//*m_pSprite
-			m_pSprite[index] = new CSprite(m_ipDevice, wsstream.str(), SPRITE_WIDTH, SPRITE_HEIGHT);
+			m_pSprite[index] = new CSprite(m_ipDevice, wsstream.str(), width, height);
+			assert(m_pSprite[index] != NULL);
 		}
 	}
 

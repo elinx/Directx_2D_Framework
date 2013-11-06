@@ -8,17 +8,23 @@
 #include "Graphics.h"
 #include "AgentWalkState.h"
 #include "AgentHeatRushState.h"
+#include "AgentAttackState.h"
 #include <assert.h>
 
 //枚举所有智能体可能处于的状态
 enum EStateID {
 	//Idle = 0,
 	Walk = 0,
-	//Attack,
+	Attack,
 	//Fire,
 	//HeatRushPrep,
 	HeatRush
 };
+
+typedef	struct _SpriteWH {
+	int width, height;
+} SPRITEWH;
+
 //声明一个函数对象，用于作用不同的控制策略
 class FMoveStrategy {
 public:
@@ -34,7 +40,7 @@ private:
 
 class CBonzeDogAgent : public CAgent {
 public:
-	CBonzeDogAgent();							//contor
+	CBonzeDogAgent();							//ctor
 	~CBonzeDogAgent();							//detor
 
 	virtual void Run();							//main run function, update starts from here.
@@ -44,6 +50,7 @@ public:
 
 	void	ChangeState(CState<CBonzeDogAgent>* pNewState);
 	bool	IsCtrlKeyPressed();
+	bool	IsLALTKeyPressed();
 	void	SetCurStateID(EStateID stateID);
 	void	ClearSpriteIndex();
 	void	SetMoveStrategy(CState<CBonzeDogAgent>* pNewState);
@@ -57,7 +64,8 @@ private:
 private:										// There are 6 sprites in this animation
 	static const int			m_WalkSpritesCount = 6;//record the frame count, to update the speed of the agent
 	static const int			m_HeatRushSpritesCount = 4;
-	static const int			m_StateCount = 2;
+	static const int			m_AttackSpritesCount = 11;
+	static const int			m_StateCount = 3;
 
 												// To hold how many sprites in each state
 	static const unsigned int	m_StateSpriteNumMap[m_StateCount];
@@ -65,6 +73,8 @@ private:										// There are 6 sprites in this animation
 	static const std::wstring	m_StateName[m_StateCount];			
 												//animation data stored, two state pointer array, NOT OBJECT
 	CAnimatedSprite*			m_pAnimation[m_StateCount];	
+	static const SPRITEWH		m_pStateSpriteWH[m_StateCount];
+
 	CState<CBonzeDogAgent>*		m_pCurState;	//current state pointer
 
 	EStateID					m_eCurStateID;	//hold the current state id

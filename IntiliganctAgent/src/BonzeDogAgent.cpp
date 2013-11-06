@@ -1,19 +1,26 @@
 #include "BonzeDogAgent.h"
 
 extern bool g_ctrlKeyPressed;
+extern bool g_laltKeyPressed;
 
 // initilize the sprites count in each agent state
 const unsigned int CBonzeDogAgent::m_StateSpriteNumMap[m_StateCount] = {
 		m_WalkSpritesCount, 
+		m_AttackSpritesCount,
 		m_HeatRushSpritesCount
 };
 const std::wstring	CBonzeDogAgent::m_StateName[m_StateCount] = {
 		//Idle,
 		L"Walk",
-		//Attack,
+		L"Attack",
 		//Fire,
 		//HeatRushPrep,
 		L"HeatRush"
+};
+const SPRITEWH	CBonzeDogAgent::m_pStateSpriteWH[m_StateCount] = {
+	{90, 60},
+	{105, 75},
+	{110, 70}
 };
 //Can not initilize array member one by one!!
 //const int CBonzeDogAgent::m_StateSpriteMap[Walk] = m_WalkSpritesCount;
@@ -64,7 +71,8 @@ bool CBonzeDogAgent::LoadSprite(CGraphics* pGraphic)
 		std::wstringstream wstrsFileBaseName;
 		wstrsFileBaseName << L"./Assets/Bronze Dog/" << m_StateName[index] << L"/" << m_StateName[index];
 		
-		pGraphic->LoadAnimation(wstrsFileBaseName.str(), m_StateSpriteNumMap[index], &m_pAnimation[index]);
+		pGraphic->LoadAnimation(wstrsFileBaseName.str(), m_StateSpriteNumMap[index], &m_pAnimation[index],
+			m_pStateSpriteWH[index].width, m_pStateSpriteWH[index].height);
 	}
 	return true;
 }
@@ -73,8 +81,8 @@ bool CBonzeDogAgent::LoadSprite(CGraphics* pGraphic)
 void CBonzeDogAgent::Run()
 {
 	this->UpdateData();
-	this->ShowAnimation(true);
 	this->UpdateState();
+	this->ShowAnimation(true);// Change the order of updatestate and show animation.
 }
 void CBonzeDogAgent::UpdateState()
 {
@@ -100,7 +108,7 @@ void CBonzeDogAgent::SpriteFrameIndexManu()
 		m_frameCount = 0;
 	}
 }
-// update agent position information
+// update agent position information, befor show the animation
 void CBonzeDogAgent::PositionManupulate()
 {
 	// update agent position information
@@ -120,8 +128,6 @@ bool CBonzeDogAgent::InitAgent(CGraphics* pGraphic)
 void CBonzeDogAgent::MovingStrategy()
 {
 	//这里如果把运动的逻辑改成回调函数或者函数对象将会更加的灵活
-	//++m_curPos_x;
-	//++m_curPos_y;
 	m_fMoveFunctor(m_curPos_x, m_curPos_y);// this is a functor now.
 }
 // change the current state to a new state
@@ -135,6 +141,10 @@ void CBonzeDogAgent::ChangeState(CState<CBonzeDogAgent>* pNewState)
 bool CBonzeDogAgent::IsCtrlKeyPressed()
 {
 	return g_ctrlKeyPressed;
+}
+bool CBonzeDogAgent::IsLALTKeyPressed()
+{
+	return g_laltKeyPressed;
 }
 // change the current id
 void CBonzeDogAgent::SetCurStateID(EStateID stateID)

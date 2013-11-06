@@ -2,7 +2,7 @@
 
 CAgentHeatRushState::CAgentHeatRushState()
 {
-	//m_eStateID = HeatRush;
+	m_eStateID = HeatRush;
 }
 
 CAgentHeatRushState::~CAgentHeatRushState()

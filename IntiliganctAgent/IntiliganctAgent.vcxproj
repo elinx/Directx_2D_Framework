@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Agent.h" />
+    <ClInclude Include="src\AgentAttackState.h" />
     <ClInclude Include="src\AgentHeatRushState.h" />
     <ClInclude Include="src\AnimatedSprite.h" />
     <ClInclude Include="src\BonzeDogAgent.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="src\WinConfigure.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AgentAttackState.cpp" />
     <ClCompile Include="src\AgentHeatRushState.cpp" />
     <ClCompile Include="src\AgentWalkState.cpp" />
     <ClCompile Include="src\BonzeDogAgent.cpp" />

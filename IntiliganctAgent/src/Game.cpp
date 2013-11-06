@@ -1,6 +1,7 @@
 #include "Game.h"
 
 bool g_ctrlKeyPressed = false;
+bool g_laltKeyPressed = false;
 
 CGame::CGame(HINSTANCE hInstance, HWND hwnd):
 	m_hInstance(hInstance),
@@ -96,6 +97,11 @@ void CGame::FrameExecute()
 		g_ctrlKeyPressed = true;
 	else
 		g_ctrlKeyPressed = false;
+
+	if(m_pInput->IsKeyPressed(DIK_LALT))
+		g_laltKeyPressed = true;
+	else
+		g_laltKeyPressed = false;
 	/***********************************************************
 	 * Agent code below
 	 ***********************************************************/

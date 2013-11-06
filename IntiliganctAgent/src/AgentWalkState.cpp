@@ -4,7 +4,7 @@ CAgentWalkState::CAgentWalkState()
 	:
 m_theta(0)
 {
-	//m_eStateID = Walk;
+	m_eStateID = Walk;
 }
 
 CAgentWalkState::~CAgentWalkState()
@@ -28,6 +28,8 @@ void CAgentWalkState::ExecuteState(CBonzeDogAgent* agent)
 {
 	if(agent->IsCtrlKeyPressed())
 		agent->ChangeState(g_pAgentHeatRushState);
+	if(agent->IsLALTKeyPressed())
+		agent->ChangeState(g_pAgentAttackState);
 }
 
 void CAgentWalkState::ExitState(CBonzeDogAgent* agent)

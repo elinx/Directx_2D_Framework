@@ -32,9 +32,9 @@ public:
 	void	DrawSprite(const int SPRITE_TYPE, int x, int y, D3DCOLOR mask);
 
 	// load the sprite information into the ppanimaion struct
-	void	LoadAnimation(std::wstring fileBase, int frameCount, CAnimatedSprite** ppAnimation){
+	void	LoadAnimation(std::wstring fileBase, int frameCount, CAnimatedSprite** ppAnimation, int width, int height){
 			*ppAnimation = new CAnimatedSprite(m_ipDevice);	// the outer fucntion did not has this reference
-			(*ppAnimation)->LoadSprites(fileBase, frameCount);
+			(*ppAnimation)->LoadSprites(fileBase, frameCount, width, height);
 	}
 
 	void	UpdateBackground();
