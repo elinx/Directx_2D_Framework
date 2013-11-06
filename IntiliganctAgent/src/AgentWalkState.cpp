@@ -17,20 +17,20 @@ CAgentWalkState* CAgentWalkState::GetInstance()
 	return &agentWalkState;
 }
 
-void CAgentWalkState::EnterState(CAgent* agent)
+void CAgentWalkState::EnterState(CBonzeDogAgent* agent)
 {
-	((CBonzeDogAgent*)agent)->SetCurStateID(Walk);
-	((CBonzeDogAgent*)agent)->ClearSpriteIndex();
-	((CBonzeDogAgent*)agent)->SetMoveStrategy(g_pAgentWalkState);
+	agent->SetCurStateID(Walk);
+	agent->ClearSpriteIndex();
+	agent->SetMoveStrategy(g_pAgentWalkState);
 }
 
-void CAgentWalkState::ExecuteState(CAgent* agent)
+void CAgentWalkState::ExecuteState(CBonzeDogAgent* agent)
 {
-	if(((CBonzeDogAgent*)agent)->IsCtrlKeyPressed())
-		((CBonzeDogAgent*)agent)->ChangeState(g_pAgentHeatRushState);
+	if(agent->IsCtrlKeyPressed())
+		agent->ChangeState(g_pAgentHeatRushState);
 }
 
-void CAgentWalkState::ExitState(CAgent* agent)
+void CAgentWalkState::ExitState(CBonzeDogAgent* agent)
 {
 }
 

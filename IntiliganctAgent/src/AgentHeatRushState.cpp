@@ -15,20 +15,20 @@ CAgentHeatRushState* CAgentHeatRushState::GetInstance()
 	return &agentHeatRushState;
 }
 
-void CAgentHeatRushState::EnterState(CAgent* agent)
+void CAgentHeatRushState::EnterState(CBonzeDogAgent* agent)
 {
-	((CBonzeDogAgent*)agent)->SetCurStateID(HeatRush);
-	((CBonzeDogAgent*)agent)->ClearSpriteIndex();
-	((CBonzeDogAgent*)agent)->SetMoveStrategy(g_pAgentHeatRushState);
+	agent->SetCurStateID(HeatRush);
+	agent->ClearSpriteIndex();
+	agent->SetMoveStrategy(g_pAgentHeatRushState);
 }
 
-void CAgentHeatRushState::ExecuteState(CAgent* agent)
+void CAgentHeatRushState::ExecuteState(CBonzeDogAgent* agent)
 {
-	if(!((CBonzeDogAgent*)agent)->IsCtrlKeyPressed())
-		((CBonzeDogAgent*)agent)->ChangeState(g_pAgentWalkState);
+	if(!(agent->IsCtrlKeyPressed()))
+		agent->ChangeState(g_pAgentWalkState);
 }
 
-void CAgentHeatRushState::ExitState(CAgent* agent)
+void CAgentHeatRushState::ExitState(CBonzeDogAgent* agent)
 {}
 
 void CAgentHeatRushState::MovingStrategy(int& x, int& y)

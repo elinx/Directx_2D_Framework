@@ -22,14 +22,14 @@ enum EStateID {
 //声明一个函数对象，用于作用不同的控制策略
 class FMoveStrategy {
 public:
-	FMoveStrategy(CState<CAgent>* state) { m_pState = state; };
-	void SetState(CState<CAgent>* newState) { m_pState = newState; }
+	FMoveStrategy(CState<CBonzeDogAgent>* state) { m_pState = state; };
+	void SetState(CState<CBonzeDogAgent>* newState) { m_pState = newState; }
 
 	void operator()(int& x, int& y) {
 		m_pState->MovingStrategy(x, y);
 	}
 private:
-	CState<CAgent>* m_pState;
+	CState<CBonzeDogAgent>* m_pState;
 };
 
 class CBonzeDogAgent : public CAgent {
@@ -42,11 +42,11 @@ public:
 	virtual void UpdateState();					//update agent state every frame
 	virtual	bool InitAgent(CGraphics* pGraphic);
 
-	void	ChangeState(CState<CAgent>* pNewState);
+	void	ChangeState(CState<CBonzeDogAgent>* pNewState);
 	bool	IsCtrlKeyPressed();
 	void	SetCurStateID(EStateID stateID);
 	void	ClearSpriteIndex();
-	void	SetMoveStrategy(CState<CAgent>* pNewState);
+	void	SetMoveStrategy(CState<CBonzeDogAgent>* pNewState);
 private:
 	void ShowAnimation(bool show);				//show the sprite Animation
 	bool LoadSprite(CGraphics* pGraphic);		//init the agent information needed
@@ -65,7 +65,7 @@ private:										// There are 6 sprites in this animation
 	static const std::wstring	m_StateName[m_StateCount];			
 												//animation data stored, two state pointer array, NOT OBJECT
 	CAnimatedSprite*			m_pAnimation[m_StateCount];	
-	CState<CAgent>*				m_pCurState;	//current state pointer
+	CState<CBonzeDogAgent>*		m_pCurState;	//current state pointer
 
 	EStateID					m_eCurStateID;	//hold the current state id
 	unsigned int				m_frameCount;

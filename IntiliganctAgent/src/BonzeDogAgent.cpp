@@ -125,7 +125,7 @@ void CBonzeDogAgent::MovingStrategy()
 	m_fMoveFunctor(m_curPos_x, m_curPos_y);// this is a functor now.
 }
 // change the current state to a new state
-void CBonzeDogAgent::ChangeState(CState<CAgent>* pNewState)
+void CBonzeDogAgent::ChangeState(CState<CBonzeDogAgent>* pNewState)
 {
 	assert(pNewState && m_pCurState);
 	m_pCurState->ExitState(this);			// leave the current state
@@ -148,7 +148,7 @@ void CBonzeDogAgent::ClearSpriteIndex()
 	m_curSpriteIndex = 0;
 }
 //改变智能体的运动策略
-void CBonzeDogAgent::SetMoveStrategy(CState<CAgent>* pNewState)
+void CBonzeDogAgent::SetMoveStrategy(CState<CBonzeDogAgent>* pNewState)
 {
 	m_fMoveFunctor.SetState(pNewState);
 }
