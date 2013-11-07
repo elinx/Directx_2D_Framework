@@ -30,6 +30,8 @@ void CAgentWalkState::ExecuteState(CBonzeDogAgent* agent)
 		agent->ChangeState(g_pAgentHeatRushState);
 	if(agent->IsLALTKeyPressed())
 		agent->ChangeState(g_pAgentAttackState);
+	if(agent->GetAgentPosX() == 471 && agent->GetAgentPosY() == 403)// a spefic spot and 
+		agent->ChangeState(g_pAgentFireState);
 }
 
 void CAgentWalkState::ExitState(CBonzeDogAgent* agent)

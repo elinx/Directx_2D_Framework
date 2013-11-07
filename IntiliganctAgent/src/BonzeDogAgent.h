@@ -9,6 +9,7 @@
 #include "AgentWalkState.h"
 #include "AgentHeatRushState.h"
 #include "AgentAttackState.h"
+#include "AgentFireState.h"
 #include <assert.h>
 
 //枚举所有智能体可能处于的状态
@@ -16,7 +17,7 @@ enum EStateID {
 	//Idle = 0,
 	Walk = 0,
 	Attack,
-	//Fire,
+	Fire,
 	//HeatRushPrep,
 	HeatRush
 };
@@ -54,6 +55,14 @@ public:
 	void	SetCurStateID(EStateID stateID);
 	void	ClearSpriteIndex();
 	void	SetMoveStrategy(CState<CBonzeDogAgent>* pNewState);
+	bool	HasFrameFinished();
+
+	int		GetAgentPosX(){
+		return m_curPos_x;
+	}
+	int		GetAgentPosY(){
+		return m_curPos_y;
+	}
 private:
 	void ShowAnimation(bool show);				//show the sprite Animation
 	bool LoadSprite(CGraphics* pGraphic);		//init the agent information needed
@@ -65,7 +74,8 @@ private:										// There are 6 sprites in this animation
 	static const int			m_WalkSpritesCount = 6;//record the frame count, to update the speed of the agent
 	static const int			m_HeatRushSpritesCount = 4;
 	static const int			m_AttackSpritesCount = 11;
-	static const int			m_StateCount = 3;
+	static const int			m_FireSpritesCount = 13;
+	static const int			m_StateCount = 4;
 
 												// To hold how many sprites in each state
 	static const unsigned int	m_StateSpriteNumMap[m_StateCount];

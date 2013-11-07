@@ -7,19 +7,21 @@ extern bool g_laltKeyPressed;
 const unsigned int CBonzeDogAgent::m_StateSpriteNumMap[m_StateCount] = {
 		m_WalkSpritesCount, 
 		m_AttackSpritesCount,
+		m_FireSpritesCount,
 		m_HeatRushSpritesCount
 };
 const std::wstring	CBonzeDogAgent::m_StateName[m_StateCount] = {
 		//Idle,
 		L"Walk",
 		L"Attack",
-		//Fire,
+		L"Fire",
 		//HeatRushPrep,
 		L"HeatRush"
 };
 const SPRITEWH	CBonzeDogAgent::m_pStateSpriteWH[m_StateCount] = {
 	{90, 60},
 	{105, 75},
+	{119, 80},
 	{110, 70}
 };
 //Can not initilize array member one by one!!
@@ -161,4 +163,10 @@ void CBonzeDogAgent::ClearSpriteIndex()
 void CBonzeDogAgent::SetMoveStrategy(CState<CBonzeDogAgent>* pNewState)
 {
 	m_fMoveFunctor.SetState(pNewState);
+}
+
+// To check whether this frame has finished
+bool CBonzeDogAgent::HasFrameFinished()
+{
+	return ((m_curSpriteIndex + 1) == m_StateSpriteNumMap[m_eCurStateID]);
 }
