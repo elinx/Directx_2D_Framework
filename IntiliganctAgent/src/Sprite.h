@@ -6,8 +6,11 @@
 #include <iomanip>
 #include <D3dx9tex.h>
 #include "WinConfigure.h"
+#include <boost/thread.hpp>
 
 #pragma comment(lib, "D3dx9.lib")
+
+//extern boost::mutex	gGraphic_Mutex;
 
 class CSprite {
 public:
@@ -42,6 +45,8 @@ public:
 	void DrawBitmap(D3DXVECTOR3* pos, D3DCOLOR mask)
 	{
 		assert(m_ipSprite /*!= NULL*/);
+		//boost::mutex::scoped_lock lock(gGraphic_Mutex);
+
 		m_ipSprite->Begin(D3DXSPRITE_ALPHABLEND);
 		m_ipSprite->Draw(m_ipTexture, NULL, NULL, pos, mask);
 		m_ipSprite->End();

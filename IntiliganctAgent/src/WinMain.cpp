@@ -1,8 +1,10 @@
 #include <Windows.h>
 #include "Game.h"
 #include "WinConfigure.h"
-
+#include <fstream>
 IDirect3DDevice9*		g_ipDevice = NULL; // this device interface is so god damn powerfull!!!!
+//boost::mutex	gGraphic_Mutex;
+std::ofstream fcout("debug.txt");
 
 LRESULT CALLBACK WinProCallBack(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 

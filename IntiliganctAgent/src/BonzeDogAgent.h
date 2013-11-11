@@ -11,8 +11,13 @@
 #include "AgentAttackState.h"
 #include "AgentFireState.h"
 #include <assert.h>
+#include "FireBall.h"
+#include <boost/thread.hpp>
+extern std::ofstream fcout;
+static const int			PDIRECTION = 1;		// positive direction
+static const int			NDIRECTION = -1;	// negative direction
 
-//枚举所有智能体可能处于的状态
+//enum all states of agent
 enum EStateID {
 	//Idle = 0,
 	Walk = 0,
@@ -22,11 +27,7 @@ enum EStateID {
 	HeatRush
 };
 
-typedef	struct _SpriteWH {
-	int width, height;
-} SPRITEWH;
-
-//声明一个函数对象，用于作用不同的控制策略
+//a functor for controling of agent.
 class FMoveStrategy {
 public:
 	FMoveStrategy(CState<CBonzeDogAgent>* state) { m_pState = state; };
@@ -57,12 +58,14 @@ public:
 	void	SetMoveStrategy(CState<CBonzeDogAgent>* pNewState);
 	bool	HasFrameFinished();
 
-	int		GetAgentPosX(){
-		return m_curPos_x;
-	}
-	int		GetAgentPosY(){
-		return m_curPos_y;
-	}
+	int		GetAgentPosX();
+	int		GetAgentPosY();
+	int		GetAgentDirectionX();
+	int		GetAgentDirectionY();
+	void	ChangeAgentDirectionX(int direction);
+	void	ChangeAgentDirectionY(int direction);
+
+	void	Fire();
 private:
 	void ShowAnimation(bool show);				//show the sprite Animation
 	bool LoadSprite(CGraphics* pGraphic);		//init the agent information needed
@@ -96,4 +99,9 @@ private:										// There are 6 sprites in this animation
 	unsigned int				m_curVelocity;	//the current speed of the agent
 
 	FMoveStrategy				m_fMoveFunctor;
+
+	int							m_direction_x;	// x direction of agent
+	int							m_direction_y;	// y direction of agent
+
+	CFireBall*					m_pFireBall;
 };

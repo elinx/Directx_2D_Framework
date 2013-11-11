@@ -1,7 +1,9 @@
 #pragma	once
 
 class CGraphics;
-
+typedef	struct _SpriteWH {
+	int width, height;
+} SPRITEWH;
 /* A base agent class, all agent in this project 
  * Should inherited from this class
  */

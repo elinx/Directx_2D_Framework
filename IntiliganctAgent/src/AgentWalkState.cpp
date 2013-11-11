@@ -44,7 +44,7 @@ void CAgentWalkState::MovingStrategy(int& x, int& y)
 	// ++x;
 	// ++y;
 
-	// ÑØ×ÅÔ²È¦×ß,°ë¾¶Îª50p
+	// walk a circle (centre(300, 300), radius 200p)
 	x = 300 + 200 * std::cos(m_theta);
 	y = 300 + 200 * std::sin(m_theta);
 	m_theta += 2 * PI / 360;

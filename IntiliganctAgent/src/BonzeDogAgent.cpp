@@ -37,27 +37,34 @@ CBonzeDogAgent::CBonzeDogAgent()
 	m_curPos_x(300),		
 	m_curPos_y(300),
 	m_curVelocity(0),	
+	m_direction_x(PDIRECTION),
+	m_direction_y(PDIRECTION),
 	m_fMoveFunctor(g_pAgentWalkState),
 	m_pCurState(g_pAgentWalkState)// int init state of agent  is walk state
 {
+	fcout << "CBonzeDogAgent::ctor" << std::endl;
 	// initilize the animation pointer array
 	for(int index = 0; index < m_StateCount; ++index)
 		m_pAnimation[index] = NULL;
+	m_pFireBall = new CFireBall();
 }
 
 CBonzeDogAgent::~CBonzeDogAgent()
 {
+	fcout << "CBonzeDogAgent::detor" << std::endl;
 	// delete the memory malloced by animatedsprite class
 	// the array do not need to delete, cause it is auto varible
 	for(int index = 0; index < m_StateCount; ++index)
 		delete m_pAnimation[index];
+	delete m_pFireBall;
+	//MessageBox(NULL, L"FireBall Be Deleted", L"Error", 0);
 }
 
 // Run the sprite Animation
 void CBonzeDogAgent::ShowAnimation(bool show)
 {
 	assert(m_pAnimation != NULL);// animation is not null
-
+	fcout << "CBonzeDogAgent::ShowAnimation()" << std::endl;
 	m_pAnimation[m_eCurStateID]->RunSprite(show, m_curPos_x, m_curPos_y, m_curSpriteIndex);
 }
 
@@ -76,23 +83,29 @@ bool CBonzeDogAgent::LoadSprite(CGraphics* pGraphic)
 		pGraphic->LoadAnimation(wstrsFileBaseName.str(), m_StateSpriteNumMap[index], &m_pAnimation[index],
 			m_pStateSpriteWH[index].width, m_pStateSpriteWH[index].height);
 	}
+	m_pFireBall->InitAgent(pGraphic);
 	return true;
 }
 
 // Update the agent data every frame.
 void CBonzeDogAgent::Run()
 {
+	fcout << "CBonzeDogAgent::Run" << std::endl;
 	this->UpdateData();
 	this->UpdateState();
 	this->ShowAnimation(true);// Change the order of updatestate and show animation.
+	if(!m_pFireBall->HasFireEnd())
+		m_pFireBall->Run();
 }
 void CBonzeDogAgent::UpdateState()
 {
+	fcout << "CBonzeDogAgent::UpdateState" << std::endl;
 	m_pCurState->ExecuteState(this);
 }
 // this is an control stratergy actually
 void CBonzeDogAgent::UpdateData()
 {
+	fcout << "CBonzeDogAgent::UpdateData" << std::endl;
 	this->SpriteFrameIndexManu();		// show which frame
 	this->MovingStrategy();				// do some moving strategy
 	this->PositionManupulate();			// show position
@@ -115,7 +128,7 @@ void CBonzeDogAgent::PositionManupulate()
 {
 	// update agent position information
 	if(m_curPos_x <= 0)								m_curPos_x = 0;
-	if(m_curPos_x >= WND_WIDTH - SPRITE_WIDTH)		m_curPos_x = WND_WIDTH - SPRITE_WIDTH;
+	if(m_curPos_x >= WND_WIDTH - SPRITE_WIDTH)		m_curPos_x = WND_WIDTH - SPRITE_WIDTH;//TODO:lsjfsl
 	if(m_curPos_y <= 0)								m_curPos_y = 0;
 	if(m_curPos_y >= WND_HEIGHT - SPRITE_HEIGHT)	m_curPos_y = WND_HEIGHT - SPRITE_HEIGHT;
 }
@@ -159,14 +172,56 @@ void CBonzeDogAgent::ClearSpriteIndex()
 {
 	m_curSpriteIndex = 0;
 }
-//改变智能体的运动策略
+// change the moving strategy of agent
 void CBonzeDogAgent::SetMoveStrategy(CState<CBonzeDogAgent>* pNewState)
 {
 	m_fMoveFunctor.SetState(pNewState);
 }
 
-// To check whether this frame has finished
+// to check whether this frame has finished
 bool CBonzeDogAgent::HasFrameFinished()
 {
 	return ((m_curSpriteIndex + 1) == m_StateSpriteNumMap[m_eCurStateID]);
+}
+// get the current x position
+int	CBonzeDogAgent::GetAgentPosX(){
+	return m_curPos_x;
+}
+// get the current y position
+int	CBonzeDogAgent::GetAgentPosY(){
+	return m_curPos_y;
+}
+// get the current x direction
+int	CBonzeDogAgent::GetAgentDirectionX()
+{
+	return m_direction_x;
+}
+// get the current y direction
+int	CBonzeDogAgent::GetAgentDirectionY()
+{
+	return m_direction_y;
+}
+// set the current x direction
+void CBonzeDogAgent::ChangeAgentDirectionX(int direction)
+{
+	m_direction_x = direction;
+}
+// set the current y direction
+void CBonzeDogAgent::ChangeAgentDirectionY(int direction)
+{
+	m_direction_y;
+}
+
+void CBonzeDogAgent::Fire()
+{	
+	fcout << "Start CBonzeDogAgent::Fire()" << std::endl;
+	m_pFireBall->SetPos(m_curPos_x + 90 , m_curPos_y + 40);
+	
+	// Do not use a thread to show graphic stuffs!!!!
+	// Just execute the run method of cfireball class in a seperate thread.
+	//boost::thread fireThread(&CFireBall::Run, m_pFireBall);
+	//m_fireThread.join();
+
+	m_pFireBall->FireEnd(false);	// Start Fire
+	fcout << "Exit CBonzeDogAgent::Fire()" << std::endl;
 }

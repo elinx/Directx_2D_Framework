@@ -26,7 +26,10 @@ void CAgentFireState::ExecuteState(CBonzeDogAgent* agent)
 {
 	//if(!(agent->IsLALTKeyPressed()))
 	if(agent->HasFrameFinished())
+	{
 		agent->ChangeState(g_pAgentWalkState);
+		agent->Fire();
+	}
 }
 
 void CAgentFireState::ExitState(CBonzeDogAgent* agent)
@@ -37,5 +40,5 @@ void CAgentFireState::MovingStrategy(int& x, int& y)
 	//x += 5;// very basic operation
 	//++y;
 	//y -= 100;
-	y += 1;
+	y += 0;
 }
