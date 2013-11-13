@@ -7,6 +7,7 @@
 #include "DirectSound.h"
 #include "Agent.h"
 #include "BonzeDogAgent.h"
+#include "Map.h"
 #include <sstream>
 #include <iomanip>
 #include <windef.h>
@@ -43,4 +44,5 @@ private:
 	CDirectSound*			m_pDirectSound;
 
 	CBonzeDogAgent*			m_pDogAgent;
+	CMap*					m_pMap;
 };

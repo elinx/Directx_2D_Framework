@@ -13,6 +13,7 @@ CGame::CGame(HINSTANCE hInstance, HWND hwnd):
 	m_pInput = new CInput();
 	m_pDirectSound = new CDirectSound();
 	m_pDogAgent = new CBonzeDogAgent();
+	m_pMap = new CMap();
 }
 
 CGame::~CGame()
@@ -41,6 +42,9 @@ CGame::~CGame()
 
 	delete m_pDogAgent;
 	m_pDogAgent = NULL;
+
+	delete m_pMap;
+	m_pMap = NULL;
 }
 
 int CGame::GameInit()
@@ -56,6 +60,9 @@ int CGame::GameInit()
 	m_pDirectSound->StartToPlay();
 
 	m_pDogAgent->InitAgent(this->m_pGFX);
+
+	if(!m_pMap->LoadMap(L"./Assets/tileset/minimap.json"))
+		return E_FAIL;
 
 	return D3D_OK;
 }

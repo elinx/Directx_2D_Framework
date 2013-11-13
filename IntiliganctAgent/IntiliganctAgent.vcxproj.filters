@@ -72,6 +72,18 @@
     <ClInclude Include="src\BallStates.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Tile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\JsonParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\WinMain.cpp">
@@ -108,6 +120,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\BallStartState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JsonParser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

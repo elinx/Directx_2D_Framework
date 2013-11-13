@@ -16,3 +16,15 @@
 //      代码需要优化，因为有的地方使用了权宜之计，主要问题有：1、agent父类的使用问题
 //		2、枚举返回值类型出错，不能编译问题；3、函数对象的使用问题，这里的方法貌似是对的
 //		但是感觉很啰嗦，干嘛不直接使用函数指针呢？(当然这里的控制策略都是member function,不能用函数指针的)
+
+//Date: 2013-11-13 15:23(从另外一个单独的工程合并而来，用来实现TileMap)
+// Four Step:
+// 1: Parser the map, read the tile and layer information(DONE!)
+// 2: Load sprites need by map(How to load and how to store the texture)
+// 3: Rearrange the map information and make a clean surface in the end.
+// 4: Swap the surface created to the main surface
+// Appendix: make a camera!
+
+// Two way to store the tileset image
+// 1: Store in a texture vector
+// 2: Store in a plain surface(Try this first!)
