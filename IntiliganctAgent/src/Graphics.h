@@ -39,6 +39,10 @@ public:
 
 	void	UpdateBackground();
 	void	SetCursorPosition(int x, int y);
+	
+	IDirect3DDevice9* GetD3DDevice() {
+		return m_ipDevice;
+	}
 private:
 	//	FONT LOAD INTO THIS SYSTEM.
 	CFont*	LoadFont(int height, int width, int weight, bool italic, std::wstring faceName, std::wstring *filePath = NULL);

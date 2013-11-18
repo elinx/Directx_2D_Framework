@@ -96,7 +96,7 @@ int	CGraphics::GraphicsInit()
 	d3d_para.BackBufferHeight				= WND_HEIGHT;
 	d3d_para.BackBufferCount				= 1;
 
-	d3d_para.BackBufferFormat				= D3DFMT_UNKNOWN;
+	d3d_para.BackBufferFormat				= D3DFMT_A8R8G8B8;
 	d3d_para.PresentationInterval			= D3DPRESENT_INTERVAL_IMMEDIATE;
 	d3d_para.Flags							= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
 

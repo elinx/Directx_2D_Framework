@@ -61,7 +61,7 @@ int CGame::GameInit()
 
 	m_pDogAgent->InitAgent(this->m_pGFX);
 
-	if(!m_pMap->LoadMap(L"./Assets/tileset/minimap.json"))
+	if(!m_pMap->LoadMap(m_pGFX->GetD3DDevice(), L"./Assets/tileset/minimap.json"))
 		return E_FAIL;
 
 	return D3D_OK;
@@ -90,8 +90,9 @@ void CGame::FrameBegin()
 
 void CGame::FrameExecute()
 {
-	// draw the background, Show a battle field png/jpeg file.
-	m_pGFX->UpdateBackground();
+	// draw the background, Show a battle field png/jpeg file
+	//m_pGFX->UpdateBackground();
+	m_pMap->DrawMap(0, 0);
 
 	// draw the header title.
 	RECT rect = {HEADER_ORGPOS_X, HEADER_ORGPOS_Y, HEADER_WIDTH, HEADER_ORGPOS_Y + HEADER_FONT_HEIGHT};

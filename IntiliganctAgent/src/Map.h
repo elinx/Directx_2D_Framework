@@ -3,7 +3,9 @@
 #include <vector>
 #include <string>
 #include <d3d9.h>
-
+#include <sstream>
+#include "WinConfigure.h"
+#include "Tile.h"
 // What does the map need?
 // 1: how many layers?
 // 2: what's the w/h of each layer?
@@ -11,7 +13,6 @@
 // 4: what's the w/h of each tile?
 // 5: what's the path of each tile, so that I can load it into the memory?
 // 6: how to rearrange the tiles or what's the tile position?
-class CTile;
 
 class CMap {
 	// Define a struct to hold the width and height information of each layer of a spefic map
@@ -38,7 +39,7 @@ public:
 		SRectWH				imageWH, tileWH;				// A struct for tileset information
 	}STileSet;
 
-	bool LoadMap(std::wstring wstrFilePath);
+	bool LoadMap(IDirect3DDevice9* ipDevice, std::wstring wstrFilePath);
 
 	/* Basic information */
 	int	 GetMapTileCountW();								// Get How many tiles in a row
@@ -61,15 +62,21 @@ public:
 	void SetTilesetCount(int tilesetCount);
 	void AddTileset(std::string image, std::string name, int firstGrid, int imageWidth,
 					int imageHeight, int tileWidth, int tileHeight);		// Add a new tileset, call the build tileset method inside
-
+	void DrawMap(int agentPosX, int agentPosY);
 private:
+	bool BuildMapSurface(int agentPosX, int agentPosY);
+
 	SLayer* BuildLayer(std::vector<int>* data, int width, int height, std::string name, std::string type, 
 						bool visible, int x, int y);		// Build a layer based on the information passed in
 	void DestroyLayer(SLayer* layer);
 	STileSet* BuildTileset(std::string image, std::string name, int firstGrid, int imageWidth,
 					int imageHeight, int tileWidth, int tileHeight);		// Build a tileset based on the information passed in
 	void DestroyTileset(STileSet* tileset);
+
+	/*Draw Map related*/
+	void ChangeViewToMapCoord(int& x, int& y);
 private:
+	IDirect3DDevice9*			m_ipDevice;
 	/* Map basic information */
 	SRectWH						m_sMapWH;					// Hold the value of w/h of the map in tile.
 	SRectWH						m_sTileWH;					// Hold the value of w/h of the tile 
@@ -82,10 +89,8 @@ private:
 	int							m_iTilesetCount;			// Get the number of tileset needed in the map
 	std::vector<STileSet*>*		m_pvspTileSet;				// Hold the tileset source information
 
-	std::vector<CTile>*			m_pTiles;					// Hold all tiles need in the map
+	CTile*						m_pTiles;					// Hold all tiles need in the map
 
 	/*Draw the background associated*/
-	IDirect3DSurface9*			m_ipMapSruface;				// Background map surface
-	std::vector<LPDIRECT3DTEXTURE9>			
-								m_ivpTilesetTexture;		// Read the tileset images and load them into this texture vector
+	IDirect3DSurface9*			m_ipMapSurface;				// Background map surface, copy the tile texture into this surface and then swap with the rander target suface
 };
