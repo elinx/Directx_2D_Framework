@@ -180,6 +180,30 @@ void CTexture::GetTileCoordOnTexture(int tileIndex,int tileWidth,int tileHeight,
 	tileTextureX = (tileIndex % (m_Width / tileWidth)) * tileWidth;
 	tileTextureY = (tileIndex / (m_Width / tileWidth)) * tileHeight;
 }
+inline D3DCOLOR AlphaBlending(D3DCOLOR dColor, D3DCOLOR sColor)
+{
+	// the base element of source pixel
+	//unsigned char da = dColor >> 24;
+	//unsigned char dr = (dColor & 0x00ff0000) >> 16;
+	//unsigned char dg = (dColor & 0x0000ff00) >> 8;
+	//unsigned char db = dColor & 0x000000ff;
+	//
+	//unsigned char sa = sColor >> 24;
+	//unsigned char sr = (sColor & 0x00ff0000) >> 16;
+	//unsigned char sg = (sColor & 0x0000ff00) >> 8;
+	//unsigned char sb = sColor & 0x000000ff;
+	//
+	//// the result element of the result pixel
+	//unsigned char ra = sa;
+	//unsigned char rr = ( sr - dr)* ra / 255 + dr;
+	//unsigned char rg = ( sg - dg)* ra / 255 + dg;
+	//unsigned char rb = ( sb - db)* ra / 255 + db;
+	//									
+	//return D3DCOLOR_ARGB(ra, rr, rg, rb);
+	
+	//return (sColor==0) ? dColor : sColor;
+	//return sColor;
+}
 /*
  * ½¨Á¢ÌùÆ¬µØÍ¼
  */
@@ -203,9 +227,9 @@ void CTexture::BuildTileAt(int tileIndex, int tileWidth,int tileHeight,
 	D3DLOCKED_RECT textureRect, mapRect;
 
 	//Lock the texture surface and read the texture rectangle 
-	if((tempTextureSurface->LockRect(&textureRect, &sRect, D3DLOCK_DISCARD)) != D3D_OK)
+	if((tempTextureSurface->LockRect(&textureRect, &sRect, D3DLOCK_DISCARD | D3DLOCK_NO_DIRTY_UPDATE)) != D3D_OK)
 		MessageBox(0, L"ERROR", L"Lock texture rectangel error", MB_OK);
-	if((m_ipMapSurface->LockRect(&mapRect, &dRect, D3DLOCK_DISCARD)) != D3D_OK)
+	if((m_ipMapSurface->LockRect(&mapRect, &dRect, D3DLOCK_DISCARD | D3DLOCK_NO_DIRTY_UPDATE)) != D3D_OK)
 		MessageBox(0, L"ERROR", L"Lock map rectangel error", MB_OK);
 
 	//Copy textureRect to mapRect, is this ok?!
@@ -215,9 +239,17 @@ void CTexture::BuildTileAt(int tileIndex, int tileWidth,int tileHeight,
 	DWORD* sRectPtr = (DWORD*)textureRect.pBits;
 	for(int index = 0; index < tileHeight; ++index)
 	{
-		CopyMemory(dRectPtr, sRectPtr, tileWidth << 2);// COPY A LINE, 4 byes of one pixel
-		(DWORD*)dRectPtr += mapRect.Pitch >> 2;
-		(DWORD*)sRectPtr += textureRect.Pitch >> 2;
+		/*Flaw: the layer objects on the front not transparent! 23bps*/
+		//CopyMemory(dRectPtr, sRectPtr, tileWidth << 2);// COPY A LINE, 4 byes of one pixel
+		/*Try alpha blending, but may become too slow, just hava a try 23bps--->22bps now*/
+		for(int w = 0; w < tileWidth; ++w)
+		{
+			//*(dRectPtr + w) = AlphaBlending(*(dRectPtr + w), *(sRectPtr + w));
+			//*(dRectPtr + w)= *(sRectPtr + w);
+			*(dRectPtr + w) = *(sRectPtr + w) ? *(sRectPtr + w) : *(dRectPtr + w);
+		}
+		dRectPtr += mapRect.Pitch >> 2 ;
+		sRectPtr += textureRect.Pitch >> 2 ;
 	}
 
 	//MessageBox(0, L"ERROR", L"Copy rectangel error", MB_OK);

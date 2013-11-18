@@ -203,7 +203,7 @@ bool CMap::BuildMapSurface(int agentPosX, int agentPosY)
 	int tileIndex = 0;
 	for(int layerIndex = 0; layerIndex < m_pvspLayer->size(); ++layerIndex)
 	{
-		for(int i = 0; i < WND_HEIGHT / m_sTileWH.height; ++i)
+		for(int i = 0; i < WND_HEIGHT / m_sTileWH.height /*+ 1*/; ++i)
 		{
 			for(int j = 0; j <  WND_WIDTH / m_sTileWH.width; ++j)
 			{
