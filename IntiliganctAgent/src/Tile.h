@@ -19,7 +19,7 @@ public:
     bool Free();
 
     // Functions to load and free a single texture
-    bool Load(int TextureIndex, std::wstring wstrFilename,
+    bool Load(int TextureIndex, std::wstring wstrFilename,int firstGrid,
 			  int imageWidth, int imageHeight,
               int TileWidth = 0, int TileHeight = 0,//tile or texture?
               D3DCOLOR Transparent = 0,

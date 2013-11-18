@@ -57,7 +57,8 @@ try
 	{
 		std::wstringstream wsstream;
 		wsstream << L"./Assets/tileset/" << s2ws((*m_pvspTileSet)[index]->image);
-		m_pTiles->Load(index, wsstream.str(), (*m_pvspTileSet)[index]->imageWH.width, 
+		m_pTiles->Load(index, wsstream.str(), (*m_pvspTileSet)[index]->firstGrid,
+						(*m_pvspTileSet)[index]->imageWH.width, 
 						(*m_pvspTileSet)[index]->imageWH.height, 
 						(*m_pvspTileSet)[index]->tileWH.width,
 						(*m_pvspTileSet)[index]->tileWH.height, 
@@ -198,15 +199,30 @@ bool CMap::BuildMapSurface(int agentPosX, int agentPosY)
 {
 	// ChangeViewToMapCoord(agentPosX, agentPosY);
 	// For simplity, here just use the most simple example: the view's original point
-	// Is same to the map's originale point
-	int tileIndex = 1;
-	for(int i = 0; i < WND_HEIGHT / m_sTileWH.height; ++i)
+	// Is inditical to the map's originale point
+	int tileIndex = 0;
+	for(int layerIndex = 0; layerIndex < m_pvspLayer->size(); ++layerIndex)
 	{
-		for(int j = 0; j <  WND_WIDTH/ m_sTileWH.width; ++j)
+		for(int i = 0; i < WND_HEIGHT / m_sTileWH.height; ++i)
 		{
-			m_pTiles->BuildTileAt(tileIndex, m_ipMapSurface, j * m_sTileWH.width, i * m_sTileWH.height);
+			for(int j = 0; j <  WND_WIDTH / m_sTileWH.width; ++j)
+			{
+				//tileIndex = (j+1) + (i+1) * (WND_WIDTH / m_sTileWH.width);
+				//if(tileIndex > 100)
+				//	tileIndex = 1;
+				tileIndex = j + i * 100;
+				m_pTiles->BuildTileAt((*(*m_pvspLayer)[layerIndex]->data)[tileIndex], m_ipMapSurface, j * m_sTileWH.width, i * m_sTileWH.height);
+			}
 		}
 	}
+	//m_pTiles->BuildTileAt(1, m_ipMapSurface, 0, 0);
+	//int count = (*m_pvspLayer)[0]->data->size();
+	//for(int index = 0; index < count; ++index)
+	//{
+	//	int x = index * m_sTileWH.width % WND_WIDTH;
+	//	int y = index * m_sTileWH.width / WND_WIDTH * m_sTileWH.height;
+	//	m_pTiles->BuildTileAt((*(*m_pvspLayer)[0]->data)[index], m_ipMapSurface, x, y);
+	//}
 	return true;
 }
 //获得智能体的坐标x, y这里的坐标是相对view里边的坐标，要通过一定的手段转换成相对于地图的坐标

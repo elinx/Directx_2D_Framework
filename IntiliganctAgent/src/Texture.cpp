@@ -177,9 +177,12 @@ bool CTexture::Draw(long DestX, long DestY,
 }
 void CTexture::GetTileCoordOnTexture(int tileIndex,int tileWidth,int tileHeight, int& tileTextureX, int& tileTextureY)
 {
-	tileTextureX = tileIndex * tileWidth;
-	tileTextureY = tileIndex * tileHeight;
+	tileTextureX = (tileIndex % (m_Width / tileWidth)) * tileWidth;
+	tileTextureY = (tileIndex / (m_Width / tileWidth)) * tileHeight;
 }
+/*
+ * ½¨Á¢ÌùÆ¬µØÍ¼
+ */
 void CTexture::BuildTileAt(int tileIndex, int tileWidth,int tileHeight, 
 		IDirect3DSurface9* m_ipMapSurface, int mapX, int mapY)
 {
@@ -189,6 +192,9 @@ void CTexture::BuildTileAt(int tileIndex, int tileWidth,int tileHeight,
 	IDirect3DSurface9* tempTextureSurface;
 	if(FAILED(m_Texture->GetSurfaceLevel(0, &tempTextureSurface)))
 		MessageBox(0, L"ERROR", L"Get texture surface error", MB_OK);// get the surface of the texture
+	// Get the description structure of the temp surface for debug
+	D3DSURFACE_DESC			tempSurfaceDesc;
+	tempTextureSurface->GetDesc(&tempSurfaceDesc);
 
 	RECT dRect = {mapX, mapY, mapX + tileWidth, mapY + tileHeight};
 	RECT sRect = {tileTextureX, tileTextureY, tileTextureX + tileWidth, tileTextureY + tileHeight};
@@ -203,7 +209,16 @@ void CTexture::BuildTileAt(int tileIndex, int tileWidth,int tileHeight,
 		MessageBox(0, L"ERROR", L"Lock map rectangel error", MB_OK);
 
 	//Copy textureRect to mapRect, is this ok?!
-	CopyMemory(mapRect.pBits, textureRect.pBits, textureRect.Pitch * 32);// height is 32
+	//NOTE:the pitch get from the D3DLOCKED_RECT is NOT the pitch of the LOCKED MEM, it is the ORIGINAL PITCH  of the surface
+	//CopyMemory(mapRect.pBits, textureRect.pBits, 32 * 4);// height is 32 for simplicity
+	DWORD* dRectPtr = (DWORD*)mapRect.pBits;
+	DWORD* sRectPtr = (DWORD*)textureRect.pBits;
+	for(int index = 0; index < tileHeight; ++index)
+	{
+		CopyMemory(dRectPtr, sRectPtr, tileWidth << 2);// COPY A LINE, 4 byes of one pixel
+		(DWORD*)dRectPtr += mapRect.Pitch >> 2;
+		(DWORD*)sRectPtr += textureRect.Pitch >> 2;
+	}
 
 	//MessageBox(0, L"ERROR", L"Copy rectangel error", MB_OK);
 
@@ -216,8 +231,9 @@ void CTexture::BuildTileAt(int tileIndex, int tileWidth,int tileHeight,
 	//RECT sRect = { tileTextureX, tileTextureY, tileTextureX + tileWidth, tileTextureY + tileHeight };
 	//POINT dPoint = { mapX, mapY};
 
-	fcout << "Map position x: " << mapX << '\t' << mapY << std::endl;
+	fcout << "Map position x: " << mapX << '\t' << "y: " << mapY << std::endl;
 
+	// The sorce surface of CopyRects function must be malloced on the default memory not on the main mem.
 	//if(FAILED(m_ipDevice->UpdateSurface(tempTextureSurface, &sRect, m_ipMapSurface, &dPoint)))
 		//MessageBox(0, L"ERROR", L"Copy texture error", MB_OK);
 	//CopyRects(tempTextureSurface, &sRect, m_ipMapSurface, &dRect);

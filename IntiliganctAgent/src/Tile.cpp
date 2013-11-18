@@ -54,7 +54,7 @@ bool CTile::Free()
 	delete m_viFirstGridNum;	
 	return true;
 }
-bool CTile::Load(int TextureIndex, std::wstring wstrFilename,
+bool CTile::Load(int TextureIndex, std::wstring wstrFilename,int firstGrid,
 			int imageWidth, int imageHeight,
             int tileWidth, int tileHeight,
             D3DCOLOR Transparent,
@@ -64,6 +64,7 @@ bool CTile::Load(int TextureIndex, std::wstring wstrFilename,
 	(*m_viWidths)[TextureIndex] = tileWidth;
 	(*m_viHeights)[TextureIndex] = tileHeight;
 	(*m_viColumns)[TextureIndex] = (*m_vpTilesetTexture)[TextureIndex]->GetWidth() / (*m_viWidths)[TextureIndex];
+	(*m_viFirstGridNum)[TextureIndex] = firstGrid;
 	return true;
 }
 bool CTile::Free(int TextureIndex)
@@ -113,17 +114,21 @@ int CTile::FindTextureByTileIndex(int tileIndex)
 	// Should optimized!!
 	for(unsigned int index = 0; index < m_viFirstGridNum->size(); ++index)
 	{
-		if((*m_viFirstGridNum)[index] = tileIndex)
+		if((*m_viFirstGridNum)[index] == tileIndex)
 			return index;
 		else if(((*m_viFirstGridNum)[index] > tileIndex) && (index != 0))
 			return (index - 1);
-		else if(((*m_viFirstGridNum)[index] < tileIndex) && (index = m_viFirstGridNum->size()))
+		else if(((*m_viFirstGridNum)[index] < tileIndex) && (index == m_viFirstGridNum->size()))
 			return index;
 	}
 	return -1;				// If can't find the tile index 
 }
+/*
+ * 建立贴片地图，这里的tileIndex应该是从0~#，但是0表示没有贴片，所以，当遇到0时，直接跳出即可
+ */
 void CTile::BuildTileAt(int tileIndex, IDirect3DSurface9* m_ipMapSruface, int mapX, int mapY)
 {
+	if(tileIndex == 0) return;
 	int textureIndex = this->FindTextureByTileIndex(tileIndex);
 	assert(textureIndex >=0 && textureIndex < m_TexturesCount);
 	
