@@ -1,25 +1,29 @@
 #include "BonzeDogAgent.h"
 
-extern bool g_ctrlKeyPressed;
-extern bool g_laltKeyPressed;
+//extern bool g_ctrlKeyPressed;
+//extern bool g_laltKeyPressed;
 
 // initilize the sprites count in each agent state
 const unsigned int CBonzeDogAgent::m_StateSpriteNumMap[m_StateCount] = {
+		m_IdleSpritesCount,
 		m_WalkSpritesCount, 
+		//m_WalkReverseSpritesCount,
 		m_AttackSpritesCount,
 		m_FireSpritesCount,
 		m_HeatRushSpritesCount
 };
 const std::wstring	CBonzeDogAgent::m_StateName[m_StateCount] = {
-		//Idle,
+		L"Idle",
 		L"Walk",
+		//L"WalkReverse",
 		L"Attack",
 		L"Fire",
-		//HeatRushPrep,
 		L"HeatRush"
 };
 const SPRITEWH	CBonzeDogAgent::m_pStateSpriteWH[m_StateCount] = {
+	{95, 60},
 	{90, 60},
+	//{90, 60},
 	{105, 75},
 	{119, 80},
 	{110, 70}
@@ -31,16 +35,21 @@ const SPRITEWH	CBonzeDogAgent::m_pStateSpriteWH[m_StateCount] = {
 CBonzeDogAgent::CBonzeDogAgent()
 	:
 	m_frameCount(0),
-	m_eCurStateID(Walk),
 	m_curSpriteIndex(0),
 	m_curFrameIndex(0),
 	m_curPos_x(300),		
 	m_curPos_y(300),
+	m_lastPos_x(300),
+	m_lastPos_y(300),
+	m_relativePos_x(0),
+	m_relativePos_y(0),
 	m_curVelocity(0),	
 	m_direction_x(PDIRECTION),
 	m_direction_y(PDIRECTION),
-	m_fMoveFunctor(g_pAgentWalkState),
-	m_pCurState(g_pAgentWalkState)// int init state of agent  is walk state
+	m_eCurStateID(Idle),
+	m_pReverseFlag(false),
+	m_fMoveFunctor(g_pAgentIdleState),
+	m_pCurState(g_pAgentIdleState)// int init state of agent  is walk state
 {
 	fcout << "CBonzeDogAgent::ctor" << std::endl;
 	// initilize the animation pointer array
@@ -61,11 +70,11 @@ CBonzeDogAgent::~CBonzeDogAgent()
 }
 
 // Run the sprite Animation
-void CBonzeDogAgent::ShowAnimation(bool show)
+void CBonzeDogAgent::ShowAnimation(bool reverse)
 {
 	assert(m_pAnimation != NULL);// animation is not null
-	fcout << "CBonzeDogAgent::ShowAnimation()" << std::endl;
-	m_pAnimation[m_eCurStateID]->RunSprite(show, m_curPos_x, m_curPos_y, m_curSpriteIndex);
+	//fcout << "CBonzeDogAgent::ShowAnimation()" << std::endl;
+	m_pAnimation[m_eCurStateID]->RunSprite(reverse, m_curPos_x, m_curPos_y, m_curSpriteIndex);
 }
 
 //init the agent information needed
@@ -90,25 +99,34 @@ bool CBonzeDogAgent::LoadSprite(CGraphics* pGraphic)
 // Update the agent data every frame.
 void CBonzeDogAgent::Run()
 {
-	fcout << "CBonzeDogAgent::Run" << std::endl;
+	//fcout << "CBonzeDogAgent::Run" << std::endl;
 	this->UpdateData();
 	this->UpdateState();
-	this->ShowAnimation(true);// Change the order of updatestate and show animation.
+	this->ShowAnimation(m_pReverseFlag);// Change the order of updatestate and show animation.
 	if(!m_pFireBall->HasFireEnd())
 		m_pFireBall->Run();
 }
 void CBonzeDogAgent::UpdateState()
 {
-	fcout << "CBonzeDogAgent::UpdateState" << std::endl;
+	//fcout << "CBonzeDogAgent::UpdateState" << std::endl;
 	m_pCurState->ExecuteState(this);
 }
 // this is an control stratergy actually
 void CBonzeDogAgent::UpdateData()
 {
-	fcout << "CBonzeDogAgent::UpdateData" << std::endl;
+	//fcout << "CBonzeDogAgent::UpdateData" << std::endl;
 	this->SpriteFrameIndexManu();		// show which frame
 	this->MovingStrategy();				// do some moving strategy
 	this->PositionManupulate();			// show position
+	this->UpdateRelativeCoord();
+}
+void CBonzeDogAgent::UpdateRelativeCoord()
+{
+	m_relativePos_x = m_curPos_x - m_lastPos_x;
+	m_relativePos_y = m_curPos_y - m_lastPos_y;
+
+	m_lastPos_x = m_curPos_x;
+	m_lastPos_y = m_curPos_y;
 }
 //update sprite index to show
 void CBonzeDogAgent::SpriteFrameIndexManu()
@@ -143,7 +161,7 @@ bool CBonzeDogAgent::InitAgent(CGraphics* pGraphic)
 void CBonzeDogAgent::MovingStrategy()
 {
 	//这里如果把运动的逻辑改成回调函数或者函数对象将会更加的灵活
-	m_fMoveFunctor(m_curPos_x, m_curPos_y);// this is a functor now.
+	m_fMoveFunctor(this);// this is a functor now.
 }
 // change the current state to a new state
 void CBonzeDogAgent::ChangeState(CState<CBonzeDogAgent>* pNewState)
@@ -153,14 +171,16 @@ void CBonzeDogAgent::ChangeState(CState<CBonzeDogAgent>* pNewState)
 	m_pCurState = pNewState;				// change state to a new one
 	m_pCurState->EnterState(this);			// enter into a new state
 }
-bool CBonzeDogAgent::IsCtrlKeyPressed()
-{
-	return g_ctrlKeyPressed;
-}
-bool CBonzeDogAgent::IsLALTKeyPressed()
-{
-	return g_laltKeyPressed;
-}
+//bool CBonzeDogAgent::IsCtrlKeyPressed()
+//{
+//	//return g_ctrlKeyPressed;
+//	return g_pDirectInput->IsKeyPressed(DIK_LCONTROL);
+//}
+//bool CBonzeDogAgent::IsLALTKeyPressed()
+//{
+//	//return g_laltKeyPressed;
+//	return g_pDirectInput->IsKeyPressed(DIK_LALT);
+//}
 // change the current id
 void CBonzeDogAgent::SetCurStateID(EStateID stateID)
 {
@@ -191,6 +211,14 @@ int	CBonzeDogAgent::GetAgentPosX(){
 int	CBonzeDogAgent::GetAgentPosY(){
 	return m_curPos_y;
 }
+void CBonzeDogAgent::SetAgentPosX(int x)
+{
+	m_curPos_x = x;
+}
+void CBonzeDogAgent::SetAgentPosY(int y)
+{
+	m_curPos_y = y;
+}
 // get the current x direction
 int	CBonzeDogAgent::GetAgentDirectionX()
 {
@@ -215,8 +243,9 @@ void CBonzeDogAgent::ChangeAgentDirectionY(int direction)
 void CBonzeDogAgent::Fire()
 {	
 	fcout << "Start CBonzeDogAgent::Fire()" << std::endl;
-	m_pFireBall->SetPos(m_curPos_x + 90 , m_curPos_y + 40);
-	
+    m_pFireBall->SetPosX(m_curPos_x + 90 );
+	m_pFireBall->SetPosY(m_curPos_y + 40 );
+	m_pFireBall->SetFireDirection(m_pReverseFlag);
 	// Do not use a thread to show graphic stuffs!!!!
 	// Just execute the run method of cfireball class in a seperate thread.
 	//boost::thread fireThread(&CFireBall::Run, m_pFireBall);
@@ -224,4 +253,24 @@ void CBonzeDogAgent::Fire()
 
 	m_pFireBall->FireEnd(false);	// Start Fire
 	fcout << "Exit CBonzeDogAgent::Fire()" << std::endl;
+}
+// get the x distance of agent moved relative to the last frame
+int	CBonzeDogAgent::GetRelativeX()
+{
+	return m_relativePos_x;
+}
+// get the y distance of agent moved relative to the last frame
+int	CBonzeDogAgent::GetRelativeY()
+{
+	return m_relativePos_y;
+}
+// To dedicate whether the agent is in the reverse direction
+bool CBonzeDogAgent::MoveReverse()
+{
+	return m_pReverseFlag;
+}
+// Set the direction of the agent move, forward or reverse?
+void CBonzeDogAgent::MoveDirection(bool reverse)
+{
+	m_pReverseFlag = reverse;
 }

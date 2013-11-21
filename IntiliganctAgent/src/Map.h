@@ -62,9 +62,9 @@ public:
 	void SetTilesetCount(int tilesetCount);
 	void AddTileset(std::string image, std::string name, int firstGrid, int imageWidth,
 					int imageHeight, int tileWidth, int tileHeight);		// Add a new tileset, call the build tileset method inside
-	void DrawMap(int agentPosX, int agentPosY);
+	void DrawMap(int cameraPosX, int cameraPosY);
 private:
-	bool BuildMapSurface(int agentPosX, int agentPosY);
+	bool BuildMapSurface(int cameraPosX, int cameraPosY);
 
 	SLayer* BuildLayer(std::vector<int>* data, int width, int height, std::string name, std::string type, 
 						bool visible, int x, int y);		// Build a layer based on the information passed in

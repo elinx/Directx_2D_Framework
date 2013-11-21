@@ -17,6 +17,7 @@ CAgentFireState* CAgentFireState::GetInstance()
 
 void CAgentFireState::EnterState(CBonzeDogAgent* agent)
 {
+	fcout << "Enter into fire state." << std::endl;
 	agent->SetCurStateID(Fire);
 	agent->ClearSpriteIndex();
 	agent->SetMoveStrategy(g_pAgentFireState);
@@ -24,21 +25,21 @@ void CAgentFireState::EnterState(CBonzeDogAgent* agent)
 
 void CAgentFireState::ExecuteState(CBonzeDogAgent* agent)
 {
-	//if(!(agent->IsLALTKeyPressed()))
-	if(agent->HasFrameFinished())
+	if(! g_pDirectInput->IsKeyPressed(DIK_SPACE))// if the space is not pressed, change state fo idle state
+		agent->ChangeState(g_pAgentIdleState);
+	else if(agent->HasFrameFinished())
 	{
-		agent->ChangeState(g_pAgentWalkState);
+		//agent->ChangeState(g_pAgentWalkState);
 		agent->Fire();
 	}
 }
 
 void CAgentFireState::ExitState(CBonzeDogAgent* agent)
-{}
-
-void CAgentFireState::MovingStrategy(int& x, int& y)
 {
-	//x += 5;// very basic operation
-	//++y;
-	//y -= 100;
-	y += 0;
+	fcout << "Exit from fire state." << std::endl;
+}
+
+void CAgentFireState::MovingStrategy(CBonzeDogAgent* agent)
+{
+	//keep steady!
 }

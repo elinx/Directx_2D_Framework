@@ -19,6 +19,7 @@ CAgentWalkState* CAgentWalkState::GetInstance()
 
 void CAgentWalkState::EnterState(CBonzeDogAgent* agent)
 {
+	fcout << "Enter into walk state." << std::endl;
 	agent->SetCurStateID(Walk);
 	agent->ClearSpriteIndex();
 	agent->SetMoveStrategy(g_pAgentWalkState);
@@ -26,26 +27,25 @@ void CAgentWalkState::EnterState(CBonzeDogAgent* agent)
 
 void CAgentWalkState::ExecuteState(CBonzeDogAgent* agent)
 {
-	if(agent->IsCtrlKeyPressed())
-		agent->ChangeState(g_pAgentHeatRushState);
-	if(agent->IsLALTKeyPressed())
-		agent->ChangeState(g_pAgentAttackState);
-	if(agent->GetAgentPosX() == 471 && agent->GetAgentPosY() == 403)// a spefic spot and 
+	//if(g_pDirectInput->IsKeyPressed(DIK_LCONTROL))
+	//	agent->ChangeState(g_pAgentHeatRushState);
+	//if(g_pDirectInput->IsKeyPressed(DIK_LALT))
+	//	agent->ChangeState(g_pAgentAttackState);
+	if(g_pDirectInput->IsKeyPressed(DIK_SPACE))// if the space key is pressed, change state fo fire state
 		agent->ChangeState(g_pAgentFireState);
+	else if(agent->HasFrameFinished())
+		agent->ChangeState(g_pAgentIdleState);// else, change to idle state
 }
 
 void CAgentWalkState::ExitState(CBonzeDogAgent* agent)
 {
+	fcout << "Exit from walk state." << std::endl;
 }
 
-void CAgentWalkState::MovingStrategy(int& x, int& y)
+void CAgentWalkState::MovingStrategy(CBonzeDogAgent* agent)
 {						
-	// most straight forward moving method
-	// ++x;
-	// ++y;
-
-	// walk a circle (centre(300, 300), radius 200p)
-	x = 300 + 200 * std::cos(m_theta);
-	y = 300 + 200 * std::sin(m_theta);
-	m_theta += 2 * PI / 360;
+	int factor = 1;
+	if(agent->MoveReverse())
+		factor = -1;
+	agent->SetAgentPosX(agent->GetAgentPosX() + 1 * factor);
 }

@@ -1,7 +1,8 @@
 #include "Game.h"
 
-bool g_ctrlKeyPressed = false;
-bool g_laltKeyPressed = false;
+extern CInput* g_pDirectInput;
+//bool g_ctrlKeyPressed = false;
+//bool g_laltKeyPressed = false;
 
 CGame::CGame(HINSTANCE hInstance, HWND hwnd):
 	m_hInstance(hInstance),
@@ -11,9 +12,11 @@ CGame::CGame(HINSTANCE hInstance, HWND hwnd):
 	m_pGFX = new CGraphics(hwnd);
 	m_pframeChecker = new CFrameChecker();//set up a timer
 	m_pInput = new CInput();
+	g_pDirectInput = m_pInput;// Init the input handler to global scope
 	m_pDirectSound = new CDirectSound();
 	m_pDogAgent = new CBonzeDogAgent();
 	m_pMap = new CMap();
+	m_pCamera = new CCamera();
 }
 
 CGame::~CGame()
@@ -45,6 +48,9 @@ CGame::~CGame()
 
 	delete m_pMap;
 	m_pMap = NULL;
+
+	delete m_pCamera;
+	m_pCamera = NULL;
 }
 
 int CGame::GameInit()
@@ -92,7 +98,7 @@ void CGame::FrameExecute()
 {
 	// draw the background, Show a battle field png/jpeg file
 	//m_pGFX->UpdateBackground();
-	m_pMap->DrawMap(0, 0);
+	m_pMap->DrawMap(m_pCamera->GetPosX(), m_pCamera->GetPosX());
 
 	// draw the header title.
 	RECT rect = {HEADER_ORGPOS_X, HEADER_ORGPOS_Y, HEADER_WIDTH, HEADER_ORGPOS_Y + HEADER_FONT_HEIGHT};
@@ -101,15 +107,15 @@ void CGame::FrameExecute()
 	// Show the position of the cursor
 	ShowCursorInfo();
 
-	if(m_pInput->IsKeyPressed(DIK_LCONTROL))
-		g_ctrlKeyPressed = true;
-	else
-		g_ctrlKeyPressed = false;
-
-	if(m_pInput->IsKeyPressed(DIK_LALT))
-		g_laltKeyPressed = true;
-	else
-		g_laltKeyPressed = false;
+	//if(m_pInput->IsKeyPressed(DIK_LCONTROL))
+	//	g_ctrlKeyPressed = true;
+	//else
+	//	g_ctrlKeyPressed = false;
+	//
+	//if(m_pInput->IsKeyPressed(DIK_LALT))
+	//	g_laltKeyPressed = true;
+	//else
+	//	g_laltKeyPressed = false;
 	/***********************************************************
 	 * Agent code below
 	 ***********************************************************/
@@ -118,6 +124,8 @@ void CGame::FrameExecute()
 	//If escape key pressed, close the window.
 	if(m_pInput->IsKeyPressed(DIK_ESCAPE))
 		DestroyWindow(m_hwnd);
+
+	m_pCamera->Update(m_pDogAgent->GetRelativeX(), m_pDogAgent->GetRelativeY());
 }
 /*
 	The game comes to an end, do some graphics clearing job and other stuffs

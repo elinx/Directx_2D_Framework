@@ -14,47 +14,18 @@
 
 class CSprite {
 public:
-	CSprite(IDirect3DDevice9* ipDevice, std::wstring filePath, int width, int height)
-		:
-	m_ipDevice(ipDevice),
-	m_filePath(filePath)
-	{
-		m_ipTexture = NULL;
-		HRESULT hr;
+	// Ctor adn detor
+	CSprite(IDirect3DDevice9* ipDevice, std::wstring filePath, int width, int height);
+	~CSprite();
 
-		if(FAILED(hr = D3DXCreateTextureFromFileEx(m_ipDevice, filePath.c_str(), width, height,
-			D3DX_DEFAULT, NULL, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, 
-			D3DX_DEFAULT, D3DX_DEFAULT, D3DCOLOR_XRGB(0, 255, 255), 
-			NULL, NULL,&m_ipTexture)))
-				assert(false);// create and load the bitmap.
-		D3DXCreateSprite(m_ipDevice, &m_ipSprite);
-	}
-	~CSprite()
-	{
-		if (m_ipTexture != NULL)
-		{
-			m_ipTexture->Release();
-			m_ipTexture = NULL;
-		}
-		if (m_ipSprite != NULL)
-		{
-			m_ipSprite->Release();
-			m_ipSprite = NULL;
-		}
-	}
-	void DrawBitmap(D3DXVECTOR3* pos, D3DCOLOR mask)
-	{
-		assert(m_ipSprite /*!= NULL*/);
-		//boost::mutex::scoped_lock lock(gGraphic_Mutex);
-
-		m_ipSprite->Begin(D3DXSPRITE_ALPHABLEND);
-		m_ipSprite->Draw(m_ipTexture, NULL, NULL, pos, mask);
-		m_ipSprite->End();
-
-	}
+	// Just Draw the sprite on the screen at the pos(x, y) position
+	void DrawBitmap(D3DXVECTOR3* pos, D3DCOLOR mask, bool reverse = false);
 private:
 	ID3DXSprite*			m_ipSprite;
 	LPDIRECT3DTEXTURE9		m_ipTexture;
 	IDirect3DDevice9*		m_ipDevice;
 	std::wstring			m_filePath;
+
+	int						m_iWidth;
+	int						m_iHeight;
 };

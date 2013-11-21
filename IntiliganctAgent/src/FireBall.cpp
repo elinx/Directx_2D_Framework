@@ -20,6 +20,7 @@ CFireBall::CFireBall()
 m_FireFinished(true),	// Not fire yet
 m_curPos_x(0),
 m_curPos_y(0),
+m_ReverseFlag(false),
 m_eCurBallStateID(EFireBallStartState),
 m_pCurState(g_pBallStartState)	// init to start state
 {
@@ -85,8 +86,10 @@ void CFireBall::UpdateData()
 		m_curSpriteIndex = 0;
 
 	// manipulate the position of animation
-	m_curPos_x += 15;	// just move forward
+	//m_curPos_x += 15;	// just move forward
+	m_pCurState -> MovingStrategy(this);
 	if(m_curPos_x >= WND_WIDTH - 20)		m_curPos_x = WND_WIDTH - 20;
+	if(m_curPos_x <= 0)	m_curPos_x = -20;
 
 	fcout << "Ball state: " << m_StateNameMap[m_eCurBallStateID].c_str() << std::endl;
 	fcout << "Ball positon x: " << m_curPos_x << "\ty: " << m_curPos_y << std::endl;
@@ -106,12 +109,15 @@ bool CFireBall::InitAgent(CGraphics* pGraphic)
 void CFireBall::ChangeState(CState<CFireBall>* pNewState)
 {}
 
-void CFireBall::SetPos(int x, int y)
+void CFireBall::SetPosX(int x)
 {
 	m_curPos_x = x;
-	m_curPos_y = y;
 }
 
+void CFireBall::SetPosY(int y)
+{
+	m_curPos_y = y;
+}
 bool CFireBall::HasFireEnd()
 {
 	return m_FireFinished;
@@ -125,4 +131,13 @@ void CFireBall::FireEnd(bool yes)
 bool CFireBall::HasFrameFinished()
 {
 	return ((m_curSpriteIndex + 1) == m_StateSpriteNumMap[m_eCurBallStateID]);
+}
+// fire to which direction
+void CFireBall::SetFireDirection(bool reverse)
+{
+	m_ReverseFlag = reverse;
+}
+bool CFireBall::GetFireDirection()
+{
+	return m_ReverseFlag;
 }

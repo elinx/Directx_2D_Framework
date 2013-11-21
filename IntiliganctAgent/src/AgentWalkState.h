@@ -21,7 +21,7 @@ public:
 	}
 public:
 	static CAgentWalkState* GetInstance();
-	void MovingStrategy(int& x, int& y);
+	void MovingStrategy(CBonzeDogAgent* agent);
 private:
 	enum EStateID	m_eStateID;
 	double			m_theta;// 沿着圆心旋转的theta角

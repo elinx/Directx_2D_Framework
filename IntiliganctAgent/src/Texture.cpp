@@ -263,7 +263,7 @@ void CTexture::BuildTileAt(int tileIndex, int tileWidth,int tileHeight,
 	//RECT sRect = { tileTextureX, tileTextureY, tileTextureX + tileWidth, tileTextureY + tileHeight };
 	//POINT dPoint = { mapX, mapY};
 
-	fcout << "Map position x: " << mapX << '\t' << "y: " << mapY << std::endl;
+	//fcout << "Map position x: " << mapX << '\t' << "y: " << mapY << std::endl;
 
 	// The sorce surface of CopyRects function must be malloced on the default memory not on the main mem.
 	//if(FAILED(m_ipDevice->UpdateSurface(tempTextureSurface, &sRect, m_ipMapSurface, &dPoint)))

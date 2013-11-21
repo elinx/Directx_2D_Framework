@@ -27,7 +27,7 @@ public:
 	}
 public:
 	static CBallStartState* GetInstance();
-	void MovingStrategy(int& x, int& y);
+	void MovingStrategy(CFireBall* agent);
 
 private:
 	EBallStateID	m_eStateID;

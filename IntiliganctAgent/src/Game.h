@@ -8,6 +8,7 @@
 #include "Agent.h"
 #include "BonzeDogAgent.h"
 #include "Map.h"
+#include "Camera.h"
 #include <sstream>
 #include <iomanip>
 #include <windef.h>
@@ -45,4 +46,5 @@ private:
 
 	CBonzeDogAgent*			m_pDogAgent;
 	CMap*					m_pMap;
+	CCamera*				m_pCamera;
 };

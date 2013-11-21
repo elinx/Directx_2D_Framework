@@ -195,12 +195,14 @@ void CMap::DestroyTileset(STileSet* tileset)
 // 1、用到的参数：MapSurface这个是目标；x, y也就是贴片在地图上的位置；TileIndex，贴片的索引，这个是源；
 // 2、思路：通过TileIndex找到贴片的纹理坐标位置和大小，地图上的x，y已经找到；然后只用一个CopyRect函数
 //    即可实现把纹理的矩形copy到地图的Surface里边了。
-bool CMap::BuildMapSurface(int agentPosX, int agentPosY)
+bool CMap::BuildMapSurface(int cameraPosX, int cameraPosY)
 {
 	// ChangeViewToMapCoord(agentPosX, agentPosY);
 	// For simplity, here just use the most simple example: the view's original point
 	// Is inditical to the map's originale point
-	int tileIndex = 0;
+	int tileIndex = 0, baseTileIndex;
+	baseTileIndex = cameraPosX / 32 + 100 * (cameraPosY % 32);
+
 	for(int layerIndex = 0; layerIndex < m_pvspLayer->size(); ++layerIndex)
 	{
 		for(int i = 0; i < WND_HEIGHT / m_sTileWH.height /*+ 1*/; ++i)
@@ -210,7 +212,7 @@ bool CMap::BuildMapSurface(int agentPosX, int agentPosY)
 				//tileIndex = (j+1) + (i+1) * (WND_WIDTH / m_sTileWH.width);
 				//if(tileIndex > 100)
 				//	tileIndex = 1;
-				tileIndex = j + i * 100;
+				tileIndex = baseTileIndex + j + i * 100;
 				m_pTiles->BuildTileAt((*(*m_pvspLayer)[layerIndex]->data)[tileIndex], m_ipMapSurface, j * m_sTileWH.width, i * m_sTileWH.height);
 			}
 		}
@@ -250,9 +252,10 @@ bool CMap::BuildMapSurface(int agentPosX, int agentPosY)
 //}
 void CMap::ChangeViewToMapCoord(int& x, int& y)
 {
+	// Do not do this any more, do this opration in the camera class.
 	// Do nothing until find the way to transform...
 }
-void CMap::DrawMap(int agentPosX, int agentPosY)
+void CMap::DrawMap(int cameraPosX, int cameraPosY)
 {
 	IDirect3DSurface9* 		m_pBackBufferSurface;
 	// The Debug trick here is get the description structure of each surface,
@@ -261,7 +264,7 @@ void CMap::DrawMap(int agentPosX, int agentPosY)
 	//IDirect3DSurface9* 		testSurface;
 	//D3DSURFACE_DESC			backSurfaceDesc, testSurfaceDesc;
 
-	BuildMapSurface(agentPosX, agentPosY);
+	BuildMapSurface(cameraPosX, cameraPosY);
 
 	//if(FAILED(m_ipDevice->CreateOffscreenPlainSurface(800, 600,
 	//	D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &testSurface, NULL)))

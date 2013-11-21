@@ -26,7 +26,7 @@ void CBallStartState::ExecuteState(CFireBall* agent)
 {
 	//if(!(agent->IsLALTKeyPressed()))
 	//if(agent->HasFrameFinished())
-	if( agent->GetPosX() > 750)
+    if( agent->GetPosX() > 750)
 		agent->FireEnd(true);	// End fire
 		//agent->ChangeState(g_pAgentWalkState);
 }
@@ -34,11 +34,10 @@ void CBallStartState::ExecuteState(CFireBall* agent)
 void CBallStartState::ExitState(CFireBall* agent)
 {}
 
-void CBallStartState::MovingStrategy(int& x, int& y)
+void CBallStartState::MovingStrategy(CFireBall* agent)
 {
-	//x += 5;// very basic operation
-	//++y;
-	//y -= 100;
-	//y += 1;
-	x += 15;
+	int factor = 1;
+	if(agent->GetFireDirection())
+		factor = -1;
+	agent->SetPosX(agent->GetPosX() + 15 * factor);
 }

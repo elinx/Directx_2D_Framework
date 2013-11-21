@@ -22,7 +22,7 @@ public:
 	}
 public:
 	static CAgentHeatRushState* GetInstance();
-	void MovingStrategy(int& x, int& y);
+	void MovingStrategy(CBonzeDogAgent* agent);
 private:
 	enum EStateID	m_eStateID;
 };

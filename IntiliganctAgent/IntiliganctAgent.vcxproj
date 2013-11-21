@@ -81,10 +81,13 @@
     <ClInclude Include="src\AgentAttackState.h" />
     <ClInclude Include="src\AgentFireState.h" />
     <ClInclude Include="src\AgentHeatRushState.h" />
+    <ClInclude Include="src\AgentIdleState.h" />
+    <ClInclude Include="src\AgentWalkReverseState.h" />
     <ClInclude Include="src\AnimatedSprite.h" />
     <ClInclude Include="src\BallStates.h" />
     <ClInclude Include="src\BonzeDogAgent.h" />
     <ClInclude Include="src\AgentWalkState.h" />
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\DevLog.h" />
     <ClInclude Include="src\DirectInput.h" />
     <ClInclude Include="src\DirectSound.h" />
@@ -105,9 +108,12 @@
     <ClCompile Include="src\AgentAttackState.cpp" />
     <ClCompile Include="src\AgentFireState.cpp" />
     <ClCompile Include="src\AgentHeatRushState.cpp" />
+    <ClCompile Include="src\AgentIdleState.cpp" />
+    <ClCompile Include="src\AgentWalkReverseState.cpp" />
     <ClCompile Include="src\AgentWalkState.cpp" />
     <ClCompile Include="src\BallStartState.cpp" />
     <ClCompile Include="src\BonzeDogAgent.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\DirectInput.cpp" />
     <ClCompile Include="src\DirectSound.cpp" />
     <ClCompile Include="src\FireBall.cpp" />
@@ -115,6 +121,7 @@
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\JsonParser.cpp" />
     <ClCompile Include="src\Map.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\WinMain.cpp" />

@@ -20,13 +20,19 @@ public:
 	virtual	bool InitAgent(CGraphics* pGraphic);				// init agent called by upper(referenced) calss			
 
 	void	ChangeState(CState<CFireBall>* pNewState);
-	void	SetPos(int x, int y);
+	void	SetPosX(int x);
+	void	SetPosY(int y);
 	int		GetPosX(){
 		return m_curPos_x;
+	}
+	int		GetPosY(){
+		return m_curPos_y;
 	}
 	bool	HasFireEnd();
 	void	FireEnd(bool yes);
 	bool	CFireBall::HasFrameFinished();
+	void	SetFireDirection(bool reverse);
+	bool	GetFireDirection();
 private:
 	void ShowAnimation(bool show);								//show the sprite Animation
 	bool LoadSprite(CGraphics* pGraphic);						// init the agent information needed
@@ -54,4 +60,5 @@ private:
 
 	unsigned int				m_curSpriteIndex;				// hold the current index of the animation
 	bool						m_FireFinished;
+	bool						m_ReverseFlag;
 };

@@ -11,5 +11,5 @@ public:
 	virtual	void EnterState(Entity* entity) = 0;
 	virtual void ExecuteState(Entity* entity) = 0;
 	virtual void ExitState(Entity* entity) = 0;
-	virtual void MovingStrategy(int& x, int& y) = 0;
+	virtual void MovingStrategy(Entity* entity) = 0;
 };

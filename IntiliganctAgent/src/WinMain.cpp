@@ -2,7 +2,10 @@
 #include "Game.h"
 #include "WinConfigure.h"
 #include <fstream>
+#include "DirectInput.h"
+
 IDirect3DDevice9*		g_ipDevice = NULL; // this device interface is so god damn powerfull!!!!
+CInput*					g_pDirectInput = NULL;
 //boost::mutex	gGraphic_Mutex;
 std::ofstream fcout("debug.txt");
 

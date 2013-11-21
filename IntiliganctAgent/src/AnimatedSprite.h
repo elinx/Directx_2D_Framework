@@ -42,12 +42,12 @@ public:
 		}
 	}
 
-	void RunSprite(bool run, int x, int y, int frameIndex, D3DCOLOR mask = D3DCOLOR_ARGB(255, 255, 255, 255))
+	void RunSprite(bool reverse, int x, int y, int frameIndex, D3DCOLOR mask = D3DCOLOR_ARGB(255, 255, 255, 255))
 	{
-		if (!run) frameIndex = 0; // if no key or specific key is pressed, do not show the animation but just
+		//if (!run) frameIndex = 0; // if no key or specific key is pressed, do not show the animation but just
 								  // show a static picture
 		D3DXVECTOR3 pos = D3DXVECTOR3(float(x),  float(y), 0.0f);
-		m_pSprite[frameIndex]->DrawBitmap(&pos, mask);
+		m_pSprite[frameIndex]->DrawBitmap(&pos, mask, reverse);
 	}
 private:
 	IDirect3DDevice9*		m_ipDevice;
