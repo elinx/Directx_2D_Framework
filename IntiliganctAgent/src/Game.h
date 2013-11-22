@@ -32,6 +32,8 @@ public:
 	void FrameEnd();
 private:
 	void ShowCursorInfo();
+	void ShowHeaderInfo();
+	void ShowAgentInfo();
 protected:
 private:
 	HINSTANCE				m_hInstance;

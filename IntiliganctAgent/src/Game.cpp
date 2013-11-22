@@ -96,26 +96,18 @@ void CGame::FrameBegin()
 
 void CGame::FrameExecute()
 {
-	// draw the background, Show a battle field png/jpeg file
-	//m_pGFX->UpdateBackground();
-	m_pMap->DrawMap(m_pCamera->GetPosX(), m_pCamera->GetPosX());
+	// Draw the background, Show a battle field png/jpeg file
+	// m_pGFX->UpdateBackground();
 
-	// draw the header title.
-	RECT rect = {HEADER_ORGPOS_X, HEADER_ORGPOS_Y, HEADER_WIDTH, HEADER_ORGPOS_Y + HEADER_FONT_HEIGHT};
-	m_pGFX->DrawText(FONT_HEADERFONT, &rect, L"Kill The Monster\n", D3DCOLOR_XRGB(0, 0, 0));
+	m_pCamera->Update(m_pDogAgent->GetRelativeX(), m_pDogAgent->GetRelativeY());
+	m_pMap->DrawMap(m_pCamera->GetPosX(), m_pCamera->GetPosY());
 
+	// Draw the header title.
+	ShowHeaderInfo();
 	// Show the position of the cursor
 	ShowCursorInfo();
-
-	//if(m_pInput->IsKeyPressed(DIK_LCONTROL))
-	//	g_ctrlKeyPressed = true;
-	//else
-	//	g_ctrlKeyPressed = false;
-	//
-	//if(m_pInput->IsKeyPressed(DIK_LALT))
-	//	g_laltKeyPressed = true;
-	//else
-	//	g_laltKeyPressed = false;
+	// Show the position of the agent
+	ShowAgentInfo();
 	/***********************************************************
 	 * Agent code below
 	 ***********************************************************/
@@ -124,8 +116,6 @@ void CGame::FrameExecute()
 	//If escape key pressed, close the window.
 	if(m_pInput->IsKeyPressed(DIK_ESCAPE))
 		DestroyWindow(m_hwnd);
-
-	m_pCamera->Update(m_pDogAgent->GetRelativeX(), m_pDogAgent->GetRelativeY());
 }
 /*
 	The game comes to an end, do some graphics clearing job and other stuffs
@@ -145,10 +135,15 @@ void CGame::FrameEnd()
 
 	m_pGFX->EndRender();
 }
+void CGame::ShowHeaderInfo()
+{
+	RECT rect = {HEADER_ORGPOS_X, HEADER_ORGPOS_Y, HEADER_WIDTH, HEADER_ORGPOS_Y + HEADER_FONT_HEIGHT};
+	m_pGFX->DrawText(FONT_HEADERFONT, &rect, L"Kill The Monster\n", D3DCOLOR_XRGB(0, 0, 0));
+}
 
 void CGame::ShowCursorInfo()
 {
-		//Get the cursor postion
+	//Get the cursor postion
 	POINT	cursorPos;
 	long dummy;
 	m_pInput->GetMouseRelativePosition(cursorPos.x, cursorPos.y, dummy);
@@ -157,4 +152,23 @@ void CGame::ShowCursorInfo()
 	std::wstringstream	wstream;
 	wstream << L"Mouse Position X: " << std::setw(4) << cursorPos.x << L"    Y: " << std::setw(4) << cursorPos.y;
 	m_pGFX->DrawText(FONT_NORMALFONT, &rect1, wstream.str(), D3DCOLOR_XRGB(255, 0, 0));
+}
+
+void CGame::ShowAgentInfo()
+{
+	//Get the cursor postion
+	int x, y, rx, ry, cx, cy;
+	x = m_pDogAgent->GetAgentPosX();
+	y = m_pDogAgent->GetAgentPosY();
+	rx = m_pDogAgent->GetRelativeX();
+	ry = m_pDogAgent->GetRelativeY();
+	cx = m_pCamera->GetPosX();
+	cy = m_pCamera->GetPosY();
+	//Show information about cursor position
+	RECT rect1 = { 0, HEADER_FONT_HEIGHT * 3, HEADER_WIDTH, HEADER_FONT_HEIGHT * 3 + HEADER_FONT_HEIGHT * 2};
+	std::wstringstream	wstream;
+	wstream << L"Agent Position(window) X: " << std::setw(4) << x << L"    Y: " << std::setw(4) << y << std::endl;
+	wstream << L"Agent Relative Position(window) X: " << std::setw(4) << rx << L"    Y: " << std::setw(4) << ry << std::endl;
+	wstream << L"Camera Position(map) X: " << std::setw(4) << cx << L"    Y: " << std::setw(4) << cy << std::endl;
+	m_pGFX->DrawText(FONT_NORMALFONT, &rect1, wstream.str(), D3DCOLOR_XRGB(0, 7, 153));
 }
