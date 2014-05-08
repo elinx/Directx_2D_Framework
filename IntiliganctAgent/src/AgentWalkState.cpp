@@ -47,5 +47,5 @@ void CAgentWalkState::MovingStrategy(CBonzeDogAgent* agent)
 	int factor = 1;
 	if(agent->MoveReverse())
 		factor = -1;
-	agent->SetAgentPosX(agent->GetAgentPosX() + 1 * factor);
+	agent->SetAgentPosX(agent->GetAgentPosX() + 2 * factor);
 }

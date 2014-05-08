@@ -5,6 +5,8 @@ const	int		WND_ORIGNIPOS_Y		= 10;	// the original position of the window, y coor
 const	int		WND_WIDTH			= 800;
 const	int		WND_HEIGHT			= 600;
 
+const	int		MAP_WIDTH			= 3200;
+const	int		MAP_HEIGHT			= 3200;
 //Header attributes
 const	int		HEADER_ORGPOS_X		= 280;
 const	int		HEADER_ORGPOS_Y		= 0;

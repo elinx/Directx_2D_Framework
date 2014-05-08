@@ -10,7 +10,7 @@ typedef	struct _SpriteWH {
 class	CAgent {
 public:
 	// Main run function of agent
-	virtual void Run()=0;
+	virtual void Run(int cx, int cy)=0;
 	// Update agent data every frame
 	virtual void UpdateData() = 0;
 	// Update agent state every frame

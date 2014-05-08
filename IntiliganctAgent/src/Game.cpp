@@ -16,7 +16,7 @@ CGame::CGame(HINSTANCE hInstance, HWND hwnd):
 	m_pDirectSound = new CDirectSound();
 	m_pDogAgent = new CBonzeDogAgent();
 	m_pMap = new CMap();
-	m_pCamera = new CCamera();
+	m_pCamera = new CCamera(m_pDogAgent->GetAgentPosX(), m_pDogAgent->GetAgentPosY());
 }
 
 CGame::~CGame()
@@ -111,7 +111,7 @@ void CGame::FrameExecute()
 	/***********************************************************
 	 * Agent code below
 	 ***********************************************************/
-	m_pDogAgent->Run();
+	m_pDogAgent->Run(m_pCamera->GetPosX(), m_pCamera->GetPosY());
 
 	//If escape key pressed, close the window.
 	if(m_pInput->IsKeyPressed(DIK_ESCAPE))

@@ -51,7 +51,7 @@ public:
 	CBonzeDogAgent();							//ctor
 	~CBonzeDogAgent();							//detor
 
-	virtual void Run();							//main run function, update starts from here.
+	virtual void Run(int cx, int cy);							//main run function, update starts from here.
 	virtual void UpdateData();					//update agent data every frame
 	virtual void UpdateState();					//update agent state every frame
 	virtual	bool InitAgent(CGraphics* pGraphic);
@@ -81,7 +81,7 @@ public:
 	bool	MoveReverse();
 	void	MoveDirection(bool reverse);
 private:
-	void ShowAnimation(bool reverse);				//show the sprite Animation
+	void ShowAnimation(bool reverse, int cx, int cy);//show the sprite Animation
 	bool LoadSprite(CGraphics* pGraphic);		//init the agent information needed
 	void PositionManupulate();					//Position Manupulate
 	void SpriteFrameIndexManu();				//manupulate the frame index to show

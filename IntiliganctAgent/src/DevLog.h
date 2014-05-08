@@ -28,3 +28,7 @@
 // Two way to store the tileset image
 // 1: Store in a texture vector
 // 2: Store in a plain surface(Try this first!)
+
+//Date: 2013-11-22 17:07要改变一些坐标
+//因为之前agent的坐标用的都是相对坐标(即相对于窗口的坐标)，当在地图上显示的时候就会not easy，目前的
+//想法就是把所有的坐标都转为相对于地图的坐标(暂且称为绝对坐标)。

@@ -1,8 +1,9 @@
 #pragma once
-
+#include "WinConfigure.h"
 class CCamera {
 public:
 	CCamera();
+	CCamera(int ax, int ay);
 	~CCamera();
 
 	int GetPosX();
@@ -13,8 +14,8 @@ private:
 	void CoordModify(int& x, int& y);
 
 private:
-	int				m_iPosX;
-	int				m_iPosY;	// The coordinate of the up left corner point
-	int				m_iLastX;
-	int				m_iLastY;	// Record the camera pos
+	int			m_iPosX;
+	int			m_iPosY;	// The coordinate of the up left corner point
+	int			m_iLastX;
+	int			m_iLastY;	// Record the camera pos
 };

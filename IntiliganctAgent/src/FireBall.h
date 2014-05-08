@@ -14,7 +14,7 @@ public:
 	~CFireBall();
 	
 	// virtual functons inherrited from agent class
-	virtual void Run();											// main run function, update starts from here.
+	virtual void Run(int cx, int cy);											// main run function, update starts from here.
 	virtual void UpdateData();									// update agent data every frame
 	virtual void UpdateState();									// update agent state every frame
 	virtual	bool InitAgent(CGraphics* pGraphic);				// init agent called by upper(referenced) calss			

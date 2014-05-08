@@ -16,7 +16,7 @@ public:
 
 	// Functions to create and free the tile interface
     bool Create(IDirect3DDevice9* ipDevice, int TexturesCount);
-    bool Free();
+	bool Free();
 
     // Functions to load and free a single texture
     bool Load(int TextureIndex, std::wstring wstrFilename,int firstGrid,
@@ -33,7 +33,7 @@ public:
     int GetCount(int Textureindex);
 
     // Draw a single tile to location
-    bool Draw(int TextureIndex, int TileIndex,                 
+    bool Draw(int TextureIndex, int TileIndex,
               int ScreenX, int ScreenY,                    
               D3DCOLOR Color = 0xFFFFFFFF,                   
               float XScale = 1.0f, float YScale = 1.0f);

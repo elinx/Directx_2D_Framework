@@ -70,11 +70,11 @@ CBonzeDogAgent::~CBonzeDogAgent()
 }
 
 // Run the sprite Animation
-void CBonzeDogAgent::ShowAnimation(bool reverse)
+void CBonzeDogAgent::ShowAnimation(bool reverse, int cx, int cy)
 {
 	assert(m_pAnimation != NULL);// animation is not null
 	//fcout << "CBonzeDogAgent::ShowAnimation()" << std::endl;
-	m_pAnimation[m_eCurStateID]->RunSprite(reverse, m_curPos_x, m_curPos_y, m_curSpriteIndex);
+	m_pAnimation[m_eCurStateID]->RunSprite(reverse, m_curPos_x - cx, m_curPos_y - cy, m_curSpriteIndex);
 }
 
 //init the agent information needed
@@ -97,14 +97,14 @@ bool CBonzeDogAgent::LoadSprite(CGraphics* pGraphic)
 }
 
 // Update the agent data every frame.
-void CBonzeDogAgent::Run()
+void CBonzeDogAgent::Run(int cx, int cy)
 {
 	//fcout << "CBonzeDogAgent::Run" << std::endl;
 	this->UpdateData();
 	this->UpdateState();
-	this->ShowAnimation(m_pReverseFlag);// Change the order of updatestate and show animation.
+	this->ShowAnimation(m_pReverseFlag, cx, cy);// Change the order of updatestate and show animation.
 	if(!m_pFireBall->HasFireEnd())
-		m_pFireBall->Run();
+		m_pFireBall->Run(0, 0);
 }
 void CBonzeDogAgent::UpdateState()
 {
@@ -146,9 +146,9 @@ void CBonzeDogAgent::PositionManupulate()
 {
 	// update agent position information
 	if(m_curPos_x <= 0)								m_curPos_x = 0;
-	if(m_curPos_x >= WND_WIDTH - SPRITE_WIDTH)		m_curPos_x = WND_WIDTH - SPRITE_WIDTH;//TODO:lsjfsl
+	if(m_curPos_x >= MAP_WIDTH - SPRITE_WIDTH)		m_curPos_x = MAP_WIDTH - SPRITE_WIDTH;//TODO:lsjfsl
 	if(m_curPos_y <= 0)								m_curPos_y = 0;
-	if(m_curPos_y >= WND_HEIGHT - SPRITE_HEIGHT)	m_curPos_y = WND_HEIGHT - SPRITE_HEIGHT;
+	if(m_curPos_y >= MAP_HEIGHT - SPRITE_HEIGHT)	m_curPos_y = MAP_HEIGHT - SPRITE_HEIGHT;
 }
 // load sprite image into this object
 bool CBonzeDogAgent::InitAgent(CGraphics* pGraphic)

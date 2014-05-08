@@ -64,7 +64,7 @@ void CFireBall::ShowAnimation(bool show)
 	m_pAnimation[m_eCurBallStateID]->RunSprite(show, m_curPos_x, m_curPos_y, m_curSpriteIndex);
 }
 // main run function, update starts from here.
-void CFireBall::Run()
+void CFireBall::Run(int cx, int cy)
 {
 	fcout << "CFireBall::Run()" << std::endl;
 	m_FireFinished = false;
