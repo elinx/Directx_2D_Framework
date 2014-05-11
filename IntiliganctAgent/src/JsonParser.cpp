@@ -23,8 +23,8 @@ bool CJsonParser::ReadFromStream(std::istream& iStream, CMap* map)
 	try 
 	{
 		// Get the basic information
-		map->SetMapTileCountW(ptree.get<int>("width"));
-		map->SetMapTileCountH(ptree.get<int>("height"));
+		map->SetTileCountRow(ptree.get<int>("width"));
+		map->SetTileCountColumn(ptree.get<int>("height"));
 		map->SetTileWidth(ptree.get<int>("tilewidth"));
 		map->SetTileHeight(ptree.get<int>("tileheight"));
 
@@ -36,24 +36,25 @@ bool CJsonParser::ReadFromStream(std::istream& iStream, CMap* map)
 		{
 				assert(v.first.empty()); // array elements have no names
 
-				std::string name		= v.second.get<std::string>("name");
-				std::string type		= v.second.get<std::string>("type");
-				int	lw					= v.second.get<int>("width");
-				int	lh					= v.second.get<int>("height");
-				int	x					= v.second.get<int>("x");
-				int	y					= v.second.get<int>("y");
-				bool visible			= v.second.get<bool>("visible");
+				CMap::map_layer *maplayer = new CMap::map_layer;
 
-				boost::property_tree::ptree datatree = v.second.get_child("data");// Can not use "layers.data", why?
-				std::vector<int>* data	= new std::vector<int>;
+				maplayer->name					= v.second.get<std::string>("name");
+				maplayer->type					= v.second.get<std::string>("type");
+				maplayer->width					= v.second.get<int>("width");
+				maplayer->height				= v.second.get<int>("height");
+				maplayer->x						= v.second.get<int>("x");
+				maplayer->y						= v.second.get<int>("y");
+				maplayer->visible				= v.second.get<bool>("visible");
+
+				boost::property_tree::ptree datatree = v.second.get_child("data");
+
 				BOOST_FOREACH(boost::property_tree::ptree::value_type& v, datatree)
 				{
-					data->push_back(v.second.get<int>(""));
+					maplayer->data.push_back(v.second.get<int>(""));
 				}
 
-				//std::vector<int> tdata = v.second.get< std::vector<int> > ("data");
-				//std::vector<int>* data	= new std::vector<int>(tdata); // copy here,, stupid any way.
-				map->AddLayer(data, lw, lh, name, type, visible, x, y);
+				map->AddLayer(maplayer);
+
 				++layerCount;
 		}
 		map->SetLayerCount(layerCount); /* Layer parser end */
@@ -65,21 +66,24 @@ bool CJsonParser::ReadFromStream(std::istream& iStream, CMap* map)
 		{
 				assert(v.first.empty()); // array elements have no names
 
-				std::string image		= v.second.get<std::string>("image");
-				std::string name		= v.second.get<std::string>("name");
-				int	iw					= v.second.get<int>("imagewidth");
-				int	ih					= v.second.get<int>("imageheight");
-				int	tw					= v.second.get<int>("tilewidth");
-				int	th					= v.second.get<int>("tileheight");
-				int firstgrid			= v.second.get<int>("firstgid");
+				CMap::map_tilestet* tileset = new CMap::map_tilestet;
 
-				map->AddTileset(image, name, firstgrid, iw, ih, tw, th);
+				tileset->image					= v.second.get<std::wstring>("image");
+				tileset->name					= v.second.get<std::string>("name");
+				tileset->img_width				= v.second.get<int>("imagewidth");
+				tileset->img_height				= v.second.get<int>("imageheight");
+				tileset->tile_width				= v.second.get<int>("tilewidth");
+				tileset->tile_height			= v.second.get<int>("tileheight");
+				tileset->firstGrid				= v.second.get<int>("firstgid");
+
+				map->AddTileset(tileset);
 				++tilesetCount;
 		}
 		map->SetTilesetCount(tilesetCount); /* Tileset parser end */
 	}
-	catch(/*ptree_error &e*/...) 
+	catch(std::exception& e) 
 	{
+		MessageBoxA(0, e.what(), "½âÎöµØÍ¼´íÎó", MB_OK);
 		return false;
 	}
 

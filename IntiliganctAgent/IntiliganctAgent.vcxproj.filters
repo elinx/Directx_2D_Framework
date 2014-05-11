@@ -13,147 +13,165 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\Framework">
+      <UniqueIdentifier>{217188a0-6515-4d82-92b9-abda725e5ba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Framework">
+      <UniqueIdentifier>{49ce270a-b2e4-46b9-88e5-da3676c30c29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Agent">
+      <UniqueIdentifier>{b3ca4139-36b4-4575-ad0e-a28c91140317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Agent">
+      <UniqueIdentifier>{3615dab0-3fdd-4234-8698-e49c9a925787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Utils">
+      <UniqueIdentifier>{5399fad3-6010-4d3f-bc51-4e2030914ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Utils">
+      <UniqueIdentifier>{2d556747-1871-47bf-a0ca-ececcf98b1da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Sprite.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\WinConfigure.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimatedSprite.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\DevLog.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Agent.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AgentWalkState.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AgentAttackState.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AgentFireState.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AgentHeatRushState.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AgentIdleState.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AgentWalkReverseState.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BonzeDogAgent.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BallStates.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FireBall.h">
+      <Filter>头文件\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimatedSprite.h">
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
     <ClInclude Include="src\DirectInput.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\DirectSound.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\Font.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\FrameChecker.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics.h">
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map.h">
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sprite.h">
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tile.h">
+      <Filter>头文件\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\State.h">
+      <Filter>头文件\Agent</Filter>
     </ClInclude>
     <ClInclude Include="src\Game.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Agent.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BonzeDogAgent.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\State.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AgentWalkState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AgentHeatRushState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AgentAttackState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AgentFireState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FireBall.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BallStates.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tile.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\JsonParser.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Map.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Texture.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Camera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AgentIdleState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AgentWalkReverseState.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\WinMain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\DirectInput.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DirectSound.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BonzeDogAgent.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\AgentAttackState.cpp">
+      <Filter>源文件\Agent</Filter>
     </ClCompile>
     <ClCompile Include="src\AgentWalkState.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AgentHeatRushState.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AgentAttackState.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Agent</Filter>
     </ClCompile>
     <ClCompile Include="src\AgentFireState.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Agent</Filter>
     </ClCompile>
-    <ClCompile Include="src\FireBall.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BallStartState.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JsonParser.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Texture.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tile.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\AgentHeatRushState.cpp">
+      <Filter>源文件\Agent</Filter>
     </ClCompile>
     <ClCompile Include="src\AgentIdleState.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Agent</Filter>
     </ClCompile>
     <ClCompile Include="src\AgentWalkReverseState.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Agent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BallStartState.cpp">
+      <Filter>源文件\Agent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BonzeDogAgent.cpp">
+      <Filter>源文件\Agent</Filter>
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectInput.cpp">
+      <Filter>源文件\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectSound.cpp">
+      <Filter>源文件\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FireBall.cpp">
+      <Filter>源文件\Agent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics.cpp">
+      <Filter>源文件\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map.cpp">
+      <Filter>源文件\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Sprite.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>源文件\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tile.cpp">
+      <Filter>源文件\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JsonParser.cpp">
+      <Filter>源文件\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

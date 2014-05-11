@@ -6,6 +6,7 @@
 #include <sstream>
 #include "WinConfigure.h"
 #include "Tile.h"
+#include "Texture.h"
 // What does the map need?
 // 1: how many layers?
 // 2: what's the w/h of each layer?
@@ -15,82 +16,85 @@
 // 6: how to rearrange the tiles or what's the tile position?
 
 class CMap {
-	// Define a struct to hold the width and height information of each layer of a spefic map
 public:
 	CMap();
 	~CMap();
 
-	/* Types define below used to hold the map information of whole map */
-	typedef struct _SLayerWH {
-		int			width, height;
-	}SRectWH;												// Define a rect struct to hold the w/h information
+	/**
+	 * A normal map consists of many layers, like background, foreground, top etc.
+	 * Structure map_layer holds the information of each layer
+	 */
+	struct map_layer {
+		std::vector<int>		data;														// 2D vector store the layer index information of tiles
+		int						width;														// layer width
+		int						height;														// layer height
+		std::string				name;														// layer name
+		std::string				type;														// layer type, like 'tile layer' or 'object layer'
+		bool					visible;													// layer is visible or not
+		int						x;															// start position of layer, x
+		int						y;															// start position of layer, y
+	};
+	/**
+	 * A tile set is an image which can be divided in to several parts, each part is 
+	 * a tile.
+	 */
+	struct map_tilestet {
+		int						firstGrid;													// start index of the tile in this image
+		std::wstring			image;														// relative path of the image
+		std::string				name;														// image name
+		int 					img_width;													// image width
+		int						img_height;													// image height
+		int						margin;														// 
+		int						spacing;													// 
+		int						tile_width;													// tile width
+		int						tile_height;												// tile height
+	};
 
-	typedef struct _slayer {
-		std::vector<int>*	data;							// 2D vector pointer, store the layer index information of tiles
-		SRectWH				layerWH;
-		std::string			name, type;
-		bool				visible;
-		int					x, y;
-	}SLayer;												// A layer struct to hold the w/h information of each layer
+	bool						LoadMap(IDirect3DDevice9* ipDevice, 
+											std::wstring wstrFilePath);
 
-	typedef struct _tileset {
-		int					firstGrid;
-		std::string			image, name;
-		SRectWH				imageWH, tileWH;				// A struct for tileset information
-	}STileSet;
-
-	bool LoadMap(IDirect3DDevice9* ipDevice, std::wstring wstrFilePath);
-
-	/* Basic information */
-	int	 GetMapTileCountW();								// Get How many tiles in a row
-	int	 GetMapTileCountH();
-	int	 GetTileWidth();
-	int	 GetTileHeight();	
-	void SetMapTileCountW(int width);						// Set How many tiles in a row
-	void SetMapTileCountH(int height);
-	void SetTileWidth(int width);
-	void SetTileHeight(int height);
+	/**
+	 * Map basic information
+	 */
+	int							GetTileCountRow();											// tile count in row
+	int							GetTileCountColumn();										// tile count in column							
+	int							GetTileWidth();												// basic tile width
+	int							GetTileHeight();											// basic tile height
+	void						SetTileCountRow(int width);									// set tile count in row
+	void						SetTileCountColumn(int height);								// set tile count in column
+	void						SetTileWidth(int width);									// set tile basic tile width
+	void						SetTileHeight(int height);									// set tile basic tile height
 
 	/* Layer information */
-	int  GetLayerCount();
-	void SetLayerCount(int layerCount);
-	void AddLayer(std::vector<int>* data, int width, int height, std::string name, std::string type, 
-						bool visible, int x, int y);		// Add a new layer, call the build layer method inside
+	int							GetLayerCount();
+	void						AddLayer(map_layer* player);								// Add a new layer, call the build layer method inside
 
 	/* Tileset information */
-	int  GetTilesetCount();
-	void SetTilesetCount(int tilesetCount);
-	void AddTileset(std::string image, std::string name, int firstGrid, int imageWidth,
-					int imageHeight, int tileWidth, int tileHeight);		// Add a new tileset, call the build tileset method inside
-	void DrawMap(int cameraPosX, int cameraPosY);
-private:
-	bool BuildMapSurface(int cameraPosX, int cameraPosY);
+	int							GetTilesetCount();
+	void						AddTileset(map_tilestet* ptileset);							// Add a new tile set, call the build tile set method inside
+	
+	void						DrawMap(int cameraPosX, int cameraPosY);
 
-	SLayer* BuildLayer(std::vector<int>* data, int width, int height, std::string name, std::string type, 
-						bool visible, int x, int y);		// Build a layer based on the information passed in
-	void DestroyLayer(SLayer* layer);
-	STileSet* BuildTileset(std::string image, std::string name, int firstGrid, int imageWidth,
-					int imageHeight, int tileWidth, int tileHeight);		// Build a tileset based on the information passed in
-	void DestroyTileset(STileSet* tileset);
+	bool						BuildTiles();
+private:
+
+	bool						BuildMapSurface(int cameraPosX, int cameraPosY);
 
 	/*Draw Map related*/
-	void ChangeViewToMapCoord(int& x, int& y);
+	void						ChangeViewToMapCoord(int& x, int& y);
 private:
 	IDirect3DDevice9*			m_ipDevice;
-	/* Map basic information */
-	SRectWH						m_sMapWH;					// Hold the value of w/h of the map in tile.
-	SRectWH						m_sTileWH;					// Hold the value of w/h of the tile 
+	IDirect3DSurface9*			m_ipMapSurface;												// Background map surface, copy the tile texture into this surface and then swap with the rander target suface
 
-	/* Map layer information */
-	int							m_iLayerCount;				// Hold the number of map layers
-	std::vector<SLayer*>*		m_pvspLayer;				// Hold all layer information into this vector of pointer of layers
+	int							m_iTileCountRow;											// tile count in x direction
+	int							m_iTileCountColumn;											// tile count in y direction
 
-	/* Map tileset information */
-	int							m_iTilesetCount;			// Get the number of tileset needed in the map
-	std::vector<STileSet*>*		m_pvspTileSet;				// Hold the tileset source information
+	int							m_iTileWidth;												// tile width 
+	int							m_iTileHeight;												// tile height
 
-	CTile*						m_pTiles;					// Hold all tiles need in the map
+	std::vector<map_layer*>		m_pvLayer;													// layer information, get count of layers directly.
 
-	/*Draw the background associated*/
-	IDirect3DSurface9*			m_ipMapSurface;				// Background map surface, copy the tile texture into this surface and then swap with the rander target suface
+	std::vector<map_tilestet*>	m_pvTileSet;												// tileset information
+
+	std::vector<CTile*>			m_pvTiles;													// all tiles need in the map
 };

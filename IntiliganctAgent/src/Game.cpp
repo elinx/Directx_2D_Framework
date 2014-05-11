@@ -67,7 +67,7 @@ int CGame::GameInit()
 
 	m_pDogAgent->InitAgent(this->m_pGFX);
 
-	if(!m_pMap->LoadMap(m_pGFX->GetD3DDevice(), L"./Assets/tileset/formalMap.json"))
+	if(!m_pMap->LoadMap(m_pGFX->GetD3DDevice(), L"./Assets/tileset/miniMap.json"))
 		return E_FAIL;
 
 	return D3D_OK;

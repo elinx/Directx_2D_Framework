@@ -3,194 +3,181 @@
 
 CMap::CMap()
 {
-	m_pvspLayer = new std::vector<SLayer*>;
-	m_pvspTileSet = new std::vector<STileSet*>;
 	m_pTiles = new CTile;
 }
 
 CMap::~CMap()
 {
-	for(std::vector<SLayer*>::iterator iter = m_pvspLayer->begin();
-		iter != m_pvspLayer->end(); ++ iter)
-		this->DestroyLayer(*iter);// ?
+	for(std::vector<map_layer*>::iterator iter = m_pvLayer.begin();
+		iter != m_pvLayer.end(); ++ iter)
+			delete *iter;
 
-	for(std::vector<STileSet*>::iterator iter = m_pvspTileSet->begin();
-		iter != m_pvspTileSet->end(); ++ iter) 
-		this->DestroyTileset(*iter);
+	for(std::vector<map_tilestet*>::iterator iter = m_pvTileSet.begin();
+		iter != m_pvTileSet.end(); ++ iter) 
+			delete *iter;
 
-	delete m_pvspLayer;
-	delete m_pvspTileSet;
 	delete m_pTiles;
 }
 // Copy from the internet, maybe not safe!
-std::wstring s2ws(const std::string& s)
+// std::wstring s2ws(const std::string& s)
+// {
+//     setlocale(LC_ALL, "chs"); 
+//     const char* _Source = s.c_str();
+//     size_t _Dsize = s.size() + 1;
+//     wchar_t *_Dest = new wchar_t[_Dsize];
+//     wmemset(_Dest, 0, _Dsize);
+//     mbstowcs(_Dest,_Source,_Dsize);
+//     std::wstring result = _Dest;
+//     delete []_Dest;
+//     setlocale(LC_ALL, "C");
+//     return result;
+// }
+/**
+ * Description: store all tiles needed into the vector
+ * Process Flow: 1. loop through the tile set, create a texture of the specific tile set image
+				 2. assign the specific part of the texture to the tile according to the grid id
+				 3. create a new tile and save the pointer into the tile vector
+ * Parameter: 
+ * Return Value: 
+ * Date: 2014-5-9
+ */
+bool CMap::BuildTiles()
 {
-    setlocale(LC_ALL, "chs"); 
-    const char* _Source = s.c_str();
-    size_t _Dsize = s.size() + 1;
-    wchar_t *_Dest = new wchar_t[_Dsize];
-    wmemset(_Dest, 0, _Dsize);
-    mbstowcs(_Dest,_Source,_Dsize);
-    std::wstring result = _Dest;
-    delete []_Dest;
-    setlocale(LC_ALL, "C");
-    return result;
-}
-bool CMap::LoadMap(IDirect3DDevice9* ipdevice, std::wstring wstrFilePath)
-{
-try 
-{
-	CJsonParser jparser;
+	HRESULT hr;
 
-	jparser.ReadFromFile(wstrFilePath, this);		// Load all information needed into the map object.
+	for (int i = 0; i < m_pvTileSet.size(); ++i)
+	{
+		std::wstringstream wsstream;
+		CTexture texture;
 
-	// create a map surface
-	m_ipDevice = ipdevice;
-	//m_ipDevice->CreateRenderTarget(800, 600, D3DFMT_A8R8G8B8, D3DMULTISAMPLE_NONE, 0, true, &m_ipMapSurface, NULL);
-	if(FAILED(m_ipDevice->CreateOffscreenPlainSurface(800, 600,
-		D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &m_ipMapSurface, NULL)))
-		MessageBox(NULL, L"Create map surface error!", L"Error", MB_OK);
-
-	// init the tile and texture objects
+		wsstream << L"./Assets/tileset/" << m_pvTileSet[index]->image);
+		
+		if (!texture.LoadFromFile(m_ipDevice,
+			wsstream.str(),
+			m_pvTileSet[index]->img_width,
+			m_pvTileSet[index]->img_height))
+		{
+			MessageBoxA(NULL, "Create tile set texture error", "Error", MB_OK);
+			return false;
+		}
+	}
 	m_pTiles->Create(ipdevice, m_iTilesetCount);	// Specific how many texture to create
 	for(int index = 0; index < m_iTilesetCount; ++index)
 	{
 		std::wstringstream wsstream;
 		wsstream << L"./Assets/tileset/" << s2ws((*m_pvspTileSet)[index]->image);
 		m_pTiles->Load(index, wsstream.str(), (*m_pvspTileSet)[index]->firstGrid,
-						(*m_pvspTileSet)[index]->imageWH.width, 
-						(*m_pvspTileSet)[index]->imageWH.height, 
-						(*m_pvspTileSet)[index]->tileWH.width,
-						(*m_pvspTileSet)[index]->tileWH.height, 
-						D3DCOLOR_XRGB(0, 255, 255));
+			(*m_pvspTileSet)[index]->imageWH.width, 
+			(*m_pvspTileSet)[index]->imageWH.height, 
+			(*m_pvspTileSet)[index]->tileWH.width,
+			(*m_pvspTileSet)[index]->tileWH.height, 
+			D3DCOLOR_XRGB(0, 255, 255));
 	}
 }
-catch(...)
+/**
+ * Description: Load the game map
+				1. parse the json format tile map
+				2. build the tiles need in this project
+				3. create a map surface
+ * Parameter: 
+ * Return Value: 
+ * Date: 2014-5-9
+ */
+bool CMap::LoadMap(IDirect3DDevice9* ipdevice, std::wstring wstrFilePath)
 {
-	return false;
-}
+	try 
+	{
+		CJsonParser jparser;
+
+		jparser.ReadFromFile(wstrFilePath, this);													// parse and get information from json file
+
+		m_ipDevice = ipdevice;
+		//m_ipDevice->CreateRenderTarget(800, 600, D3DFMT_A8R8G8B8, D3DMULTISAMPLE_NONE, 0, true, &m_ipMapSurface, NULL);
+		
+		if(FAILED(m_ipDevice->CreateOffscreenPlainSurface(800,										// create a map surface to draw tiles on
+			600,
+			D3DFMT_A8R8G8B8, 
+			D3DPOOL_SYSTEMMEM, 
+			&m_ipMapSurface, 
+			NULL)))
+		{
+			MessageBox(NULL, L"Create map surface error!", L"Error", MB_OK);						// TODO: Use the back buffer instead of the map surface
+		}
+
+		BuildTiles();																				// init the tile and texture objects
+	}
+	catch(std::exception& e) 
+	{
+		MessageBoxA(0, e.what(), "Load map Error", MB_OK);
+		return false;
+	}
 	return true;
 }
 // Get How many tiles in a row
-int	 CMap::GetMapTileCountW()								
+int	 CMap::GetTileCountRow()								
 {
-	return m_sMapWH.width;
+	return m_iTileCountRow;
 }
 // Get How many tiles in a column
-int	 CMap::GetMapTileCountH()
+int	 CMap::GetTileCountColumn()
 {
-	return m_sMapWH.height;
+	return m_iTileCountColumn;
 }
 // Get tile width
 int	 CMap::GetTileWidth()
 {
-	return m_sTileWH.width;
+	return m_iTileWidth;
 }
 // Get tile height
 int	 CMap::GetTileHeight()
 {
-	return m_sTileWH.height;
+	return m_iTileHeight;
 }
 // Set How many tiles in a row
-void CMap::SetMapTileCountW(int width)						
+void CMap::SetTileCountRow(int width)						
 {
-	m_sMapWH.width = width;
+	m_iTileCountRow = width;
 }
 // Set How many tiles in a column
-void CMap::SetMapTileCountH(int height)
+void CMap::SetTileCountColumn(int height)
 {
-	m_sMapWH.height = height;
+	m_iTileCountColumn = height;
 }
 // Set tile width
 void CMap::SetTileWidth(int width)
 {
-	m_sTileWH.width = width;
+	m_iTileCountRow = width;
 }
 // Set tile height
 void CMap::SetTileHeight(int height)
 {
-	m_sTileWH.height = height;
+	m_iTileCountColumn = height;
 }
 /* Layer information */
 int  CMap::GetLayerCount()
 {
-	return m_iLayerCount;
+	return m_pvLayer.size();
 }
-void CMap::SetLayerCount(int layerCount)
-{
-	m_iLayerCount = layerCount;
-}
+
 // Add a new layer, call the build layer method inside
-void CMap::AddLayer(std::vector<int>* data, int width, int height, std::string name, std::string type, 
-					bool visible, int x, int y)		
+void CMap::AddLayer(map_layer* player)		
 {
-	m_pvspLayer->push_back( this->BuildLayer(data, width, height, name, type, visible, x, y) );
-}
-// Build a layer based on the information passed in
-CMap::SLayer* CMap::BuildLayer(std::vector<int>* data, int width, int height, std::string name, std::string type, 
-					bool visible, int x, int y)		
-{
-	SLayer* layer			= new SLayer;	// new a layer on heap
-	layer->data				= data;
-	layer->layerWH.width	= width;
-	layer->layerWH.height	= height;
-	layer->name				= name;
-	layer->type				= type;
-	layer->visible			= visible;
-	layer->x				= x;
-	layer->y				= y;
-
-	return layer;
-}
-// Delete the layer malloc on the heap
-void CMap::DestroyLayer(SLayer* layer)
-{
-	// Delete the index data
-	delete layer->data;
-	layer->data = NULL;
-
-	// Delete the layer
-	delete layer;
-	layer = NULL;
+	assert(player != NULL);
+	m_pvLayer.push_back(player);
 }
 
 /* Tileset information */
 int  CMap::GetTilesetCount()
 {
-	return m_iTilesetCount;
+	return m_pvTileSet.size();
 }
-void CMap::SetTilesetCount(int tilesetCount)
-{
-	m_iTilesetCount = tilesetCount;
-}
-// Add a new layer, call the build layer method inside
-void CMap::AddTileset(std::string image, std::string name, int firstGrid, int imageWidth,
-					int imageHeight, int tileWidth, int tileHeight)		
-{
-	m_pvspTileSet->push_back( this->BuildTileset(image, name, firstGrid, imageWidth, imageHeight, tileWidth, tileHeight) );
-}
-// Build a layer based on the information passed in
-CMap::STileSet* CMap::BuildTileset(std::string image, std::string name, int firstGrid, int imageWidth,
-					int imageHeight, int tileWidth, int tileHeight)		
-{
-	STileSet* tileset			= new STileSet;	// new a layer on heap
-	tileset->image				= image;
-	tileset->imageWH.width		= imageWidth;
-	tileset->imageWH.height		= imageHeight;
-	tileset->name				= name;
-	tileset->tileWH.width		= tileWidth;
-	tileset->tileWH.height		= tileHeight;
-	tileset->firstGrid			= firstGrid;
 
-	return tileset;
-}
-// Delete the layer malloc on the heap
-void CMap::DestroyTileset(STileSet* tileset)
+// Add a new layer, call the build layer method inside
+void CMap::AddTileset(map_tilestet* ptileset)		
 {
-	// Delete the tileset
-	delete tileset;
-	tileset = NULL;
+	m_pvTileSet.push_back(ptileset);
 }
+
 // 这个函数用来生成可视的地图
 // 1、用到的参数：MapSurface这个是目标；x, y也就是贴片在地图上的位置；TileIndex，贴片的索引，这个是源；
 // 2、思路：通过TileIndex找到贴片的纹理坐标位置和大小，地图上的x，y已经找到；然后只用一个CopyRect函数
